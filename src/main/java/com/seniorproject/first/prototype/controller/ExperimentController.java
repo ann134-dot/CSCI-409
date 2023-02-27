@@ -3,10 +3,7 @@ package com.seniorproject.first.prototype.controller;
 import com.seniorproject.first.prototype.entity.Experiment;
 import com.seniorproject.first.prototype.service.ExperimentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,6 +16,11 @@ public class ExperimentController {
     @PostMapping("/create-experiment")
     public Experiment createExperiment(@RequestBody Experiment experiment){
         return experimentService.createExperiment(experiment);
+    }
+
+    @GetMapping("myCreatedExperiments/{id}")
+    public Experiment getMyCreatedExperimentById(@PathVariable("id") Long experimentId){
+        return experimentService.getMyCreatedExperimentById(experimentId);
     }
 
 }

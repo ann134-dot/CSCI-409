@@ -27,8 +27,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests()
                 .antMatchers("/auth/**") //should be requestMatchers() for spring boot v3+
                 .permitAll()
-                .antMatchers("/experiments-byEmail/**")
-                .permitAll()
+//                .antMatchers("/experiments-byEmail/**")
+//                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

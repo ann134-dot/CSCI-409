@@ -6,4 +6,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ExperimentService {
     public Experiment createExperiment(Experiment experiment);
+
+    public Experiment getMyCreatedExperimentById(Long experimentId);
 }

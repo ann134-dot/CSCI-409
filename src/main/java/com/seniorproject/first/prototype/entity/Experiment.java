@@ -1,12 +1,10 @@
 package com.seniorproject.first.prototype.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.seniorproject.first.prototype.util.ExperimentOverallResultsConverter;
 import com.seniorproject.first.prototype.util.ExperimentWordsConverter;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -45,7 +43,7 @@ public class Experiment {
     private String description;
     private Double betweenWordTime;
     private Double wordTime;
-    private Boolean isPublic;
+    private Boolean isJoinable;
 
     @SuppressWarnings("JpaAttributeTypeInspection") // bc of ide issue
     @Convert(converter = ExperimentWordsConverter.class)
@@ -70,9 +68,21 @@ public class Experiment {
     )
     private User creator;
 
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    @JsonIgnore
     @OneToMany(
             mappedBy = "experiment",
-            fetch = FetchType.EAGER
+            fetch = FetchType.LAZY
     )
     private List<Participation> participations;
+
+    @JsonIgnore
+    public List<Participation> getParticipations() {
+        return this.participations;
+    }
+    @JsonIgnore
+    public void setParticipations(List<Participation> participations) {
+        this.participations = participations;
+    }
 }

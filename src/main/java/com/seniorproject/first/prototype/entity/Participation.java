@@ -1,9 +1,7 @@
 package com.seniorproject.first.prototype.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -24,6 +22,7 @@ public class Participation {
             generator = "participationId_sequence"
     )
     private Long participationId;
+    private String status;
     @ManyToOne(
             cascade = CascadeType.ALL
     )
@@ -32,6 +31,10 @@ public class Participation {
             referencedColumnName = "userId"
     )
     private User participant;
+
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    @JsonIgnore
     @ManyToOne(
             cascade = CascadeType.ALL
     )
@@ -42,4 +45,14 @@ public class Participation {
     private Experiment experiment;
 
     private String participantResults;
+
+    @JsonIgnore
+    public void setExperiment(Experiment experiment) {
+        this.experiment = experiment;
+    }
+
+    @JsonIgnore
+    public Experiment getExperiment() {
+        return this.experiment;
+    }
 }

@@ -1,10 +1,8 @@
 package com.seniorproject.first.prototype.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,14 +42,21 @@ public class User implements UserDetails {
     private String password;
     private Long age;
 
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     @JsonManagedReference
+    @JsonIgnore
     @OneToMany(
             mappedBy = "creator"
     )
     private List<Experiment> createdExperiments;
+
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    @JsonIgnore
     @OneToMany(
             mappedBy = "participant",
-            fetch = FetchType.EAGER
+            fetch = FetchType.LAZY
     )
     private List<Participation> participatedExperiments;
 
@@ -86,5 +91,25 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @JsonIgnore
+    public List<Experiment> getCreatedExperiments() {
+        return this.createdExperiments;
+    }
+
+    @JsonIgnore
+    public void setCreatedExperiments(List<Experiment> createdExperiments) {
+        this.createdExperiments = createdExperiments;
+    }
+
+    @JsonIgnore
+    public void setParticipatedExperiments(List<Participation> participatedExperiments) {
+        this.participatedExperiments = participatedExperiments;
+    }
+
+    @JsonIgnore
+    public List<Participation> getParticipatedExperiments() {
+        return participatedExperiments;
     }
 }

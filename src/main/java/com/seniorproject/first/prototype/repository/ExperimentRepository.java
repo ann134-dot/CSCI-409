@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ExperimentRepository extends JpaRepository<Experiment, Long> {
-    public List<Experiment> findByCreatorUserIdAndIsPublic(Long userId, Boolean isPublic);
+    public List<Experiment> findByCreatorUserIdAndIsJoinable(Long userId, Boolean isPublic);
     public Experiment findByExperimentId(Long experimentId);
 }

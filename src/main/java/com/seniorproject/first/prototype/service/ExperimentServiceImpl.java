@@ -38,4 +38,9 @@ public class ExperimentServiceImpl implements ExperimentService{
         return experimentRepository.save(experiment);
     }
 
+    @Override
+    public Experiment getMyCreatedExperimentById(Long experimentId) {
+        return experimentRepository.findByExperimentId(experimentId);
+    }
+
 }
