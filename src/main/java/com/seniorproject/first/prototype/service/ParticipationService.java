@@ -23,4 +23,8 @@ public interface ParticipationService {
     public List<Participation> getExperimentPendingRequests(Long experimentId) throws Exception;
 
     public Participation postAcceptJoinRequest(Long participationId) throws Exception;
+
+    public List<Participation> getExperimentJoinedParticipations(Long experimentId) throws Exception;
+
+    public List<Participation> getExperimentTakenParticipations(Long experimentId) throws Exception;
 }

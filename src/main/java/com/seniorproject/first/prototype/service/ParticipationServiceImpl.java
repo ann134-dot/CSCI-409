@@ -59,49 +59,38 @@ public class ParticipationServiceImpl implements ParticipationService{
     @Override
     @Transactional
     public Participation postParticipate(PostParticipateRequest postParticipateRequest, Long experimentId) throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Experiment experiment = experimentRepository.findByExperimentId(experimentId);
-        if(experiment.getIsJoinable() == false){
-            throw new Exception("Not public");
+        Participation participation = participationRepository.findParticipationByParticipantUserEmailAndExperiment_ExperimentIdAndStatus(authentication.getName(), experimentId, "joined");
+        if(participation == null){
+            throw new Exception("Users that did not join the experiment can not take it");
+        }
+        if(participationRepository.findParticipationByParticipantUserEmailAndExperiment_ExperimentIdAndStatus(authentication.getName(), experimentId, "taken") != null){
+            throw new Exception("You have already taken the experiment");
         }
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i < experiment.getWords().size(); i++){
-            if(postParticipateRequest.getParticipantResponse().containsValue(experiment.getWords().get(i))){
-                experiment.getOverallResults().put(i, experiment.getOverallResults().get(i) + 1);
+            if(postParticipateRequest.getParticipantResponseList().contains(experiment.getWords().get(i))){
+                if(experiment.getOverallResults().get(i) == null){
+                    experiment.getOverallResults().put(i, 1);
+                }else {
+                    experiment.getOverallResults().put(i, experiment.getOverallResults().get(i) + 1);
+                }
                 sb.append("1");
             } else{
                 sb.append("0");
             }
         }
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication.isAuthenticated()){
-            if(authentication.getName().equals(experiment.getCreator().getUserEmail())){
-                throw new Exception("Can not participate in your own Experiment");
-            } else{
-                Participation participation = new Participation();
-                participation.setParticipant(userRepository.findUserByUserEmail(authentication.getName()).get());
-                participation.setParticipantResults(sb.reverse().toString());
-                participation.setExperiment(experiment);
+        experiment.setParticipantCount(experiment.getParticipantCount() + 1);
+        //experiment.getParticipations().add(participation);
+        experimentRepository.save(experiment);
 
-                experiment.setParticipantCount(experiment.getParticipantCount() + 1);
-                //experiment.getParticipations().add(participation);
+        participation.setParticipantResults(sb.reverse().toString());
+        participation.setExperiment(experiment);
+        participation.setStatus("taken");
 
-                experimentRepository.save(experiment);
-
-                return participationRepository.save(participation);
-            }
-        } else {
-            Participation participation = new Participation();
-            participation.setParticipantResults(sb.reverse().toString());
-            participation.setExperiment(experiment);
-
-            experiment.setParticipantCount(experiment.getParticipantCount() + 1);
-            //experiment.getParticipations().add(participation);
-
-            experimentRepository.save(experiment);
-
-            return participationRepository.save(participation);
-        }
+        return participationRepository.save(participation);
     }
 
     @Override
@@ -143,5 +132,25 @@ public class ParticipationServiceImpl implements ParticipationService{
 
         participation.setStatus("joined");
         return participationRepository.save(participation);
+    }
+
+    @Override
+    public List<Participation> getExperimentJoinedParticipations(Long experimentId) throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(!authentication.getName().equals(experimentRepository.findByExperimentId(experimentId).getCreator().getUserEmail())){
+            throw new Exception("Not permitted");
+        } else {
+            return participationRepository.findParticipationsByExperimentExperimentIdAndStatus(experimentId, "joined");
+        }
+    }
+
+    @Override
+    public List<Participation> getExperimentTakenParticipations(Long experimentId) throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(!authentication.getName().equals(experimentRepository.findByExperimentId(experimentId).getCreator().getUserEmail())){
+            throw new Exception("Not permitted");
+        } else {
+            return participationRepository.findParticipationsByExperimentExperimentIdAndStatus(experimentId, "taken");
+        }
     }
 }

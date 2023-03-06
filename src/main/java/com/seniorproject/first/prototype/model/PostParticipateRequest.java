@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -12,5 +13,5 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostParticipateRequest {
-    private Map<Integer, String> participantResponse;
+    private List<String> participantResponseList;
 }

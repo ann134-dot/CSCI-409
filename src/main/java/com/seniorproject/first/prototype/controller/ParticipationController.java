@@ -47,4 +47,14 @@ public class ParticipationController {
     public Participation postParticipate(@RequestBody PostParticipateRequest postParticipateRequest, @PathVariable("id") Long experimentId) throws Exception {
         return participationService.postParticipate(postParticipateRequest, experimentId);
     }
+
+    @GetMapping("myCreatedExperiments/joined/{id}")
+    public List<Participation> getExperimentJoinedParticipations(@PathVariable("id") Long experimentId) throws Exception {
+        return participationService.getExperimentJoinedParticipations(experimentId);
+    }
+
+    @GetMapping("myCreatedExperiments/taken/{id}")
+    public List<Participation> getExperimentTakenParticipations(@PathVariable("id") Long experimentId) throws Exception {
+        return participationService.getExperimentTakenParticipations(experimentId);
+    }
 }

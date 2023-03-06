@@ -10,4 +10,5 @@ import java.util.List;
 public interface ParticipationRepository extends JpaRepository<Participation, Long> {
     public List<Participation> findParticipationsByExperimentExperimentIdAndStatus(Long experimentId, String status);
     public Participation findParticipationByParticipantUserEmailAndExperiment_ExperimentIdAndStatus(String userEmail, Long experimentId, String status);
+
 }
