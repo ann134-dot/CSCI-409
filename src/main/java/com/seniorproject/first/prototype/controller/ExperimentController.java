@@ -23,4 +23,18 @@ public class ExperimentController {
         return experimentService.getMyCreatedExperimentById(experimentId);
     }
 
+    @GetMapping("UserPendingJoinExperiments")
+    public List<Experiment> getMyPendingJoinExperiments(){
+        return experimentService.getMyPendingJoinExperiments();
+    }
+
+    @GetMapping("UserJoinedExperiments")
+    public List<Experiment> getMyJoinedExperiments(){
+        return experimentService.getMyJoinedExperiments();
+    }
+
+    @GetMapping("UserTakenExperiments")
+    public List<Experiment> getMyTakenExperiments(){
+        return experimentService.getMyTakenExperiments();
+    }
 }

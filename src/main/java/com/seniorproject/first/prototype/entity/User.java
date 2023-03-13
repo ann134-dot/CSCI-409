@@ -41,6 +41,8 @@ public class User implements UserDetails {
     private String lastName;
     private String password;
     private Long age;
+    private String gender;
+    private String degree;
 
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)

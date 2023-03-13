@@ -11,4 +11,7 @@ public interface ParticipationRepository extends JpaRepository<Participation, Lo
     public List<Participation> findParticipationsByExperimentExperimentIdAndStatus(Long experimentId, String status);
     public Participation findParticipationByParticipantUserEmailAndExperiment_ExperimentIdAndStatus(String userEmail, Long experimentId, String status);
 
+    public Participation findParticipationByParticipantUserEmailAndExperiment_ExperimentId(String userEmail, Long experimentId);
+
+    List<Participation> findParticipationsByParticipantUserEmailAndStatus(String userEmail, String status);
 }

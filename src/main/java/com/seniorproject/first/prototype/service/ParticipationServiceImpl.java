@@ -100,6 +100,9 @@ public class ParticipationServiceImpl implements ParticipationService{
         if(experiment.getCreator().getUserEmail().equals(authentication.getName())){
             throw new Exception("Can not join your own experiment");
         }
+        if(participationRepository.findParticipationByParticipantUserEmailAndExperiment_ExperimentId(authentication.getName(), experimentId) != null){
+            throw new Exception("Request was already sent OR Already joined OR Experiment was already taken");
+        }
 
         Participation participation = new Participation();
         User participant = userRepository.findUserByUserEmail(authentication.getName()).get();

@@ -1,14 +1,17 @@
 package com.seniorproject.first.prototype.service;
 
 import com.seniorproject.first.prototype.entity.Experiment;
+import com.seniorproject.first.prototype.entity.Participation;
 import com.seniorproject.first.prototype.entity.User;
 import com.seniorproject.first.prototype.repository.ExperimentRepository;
+import com.seniorproject.first.prototype.repository.ParticipationRepository;
 import com.seniorproject.first.prototype.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +23,8 @@ public class ExperimentServiceImpl implements ExperimentService{
     private ExperimentRepository experimentRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ParticipationRepository participationRepository;
     @Override
     public Experiment createExperiment(Experiment experiment) {
 
@@ -41,6 +46,48 @@ public class ExperimentServiceImpl implements ExperimentService{
     @Override
     public Experiment getMyCreatedExperimentById(Long experimentId) {
         return experimentRepository.findByExperimentId(experimentId);
+    }
+
+    @Override
+    public List<Experiment> getMyPendingJoinExperiments() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        List<Participation> participationList = participationRepository.findParticipationsByParticipantUserEmailAndStatus(authentication.getName(), "pending");
+
+        List<Experiment> pendingExperimentsList = new ArrayList<>();
+
+        for(int i = 0; i < participationList.size(); i++){
+            pendingExperimentsList.add(participationList.get(i).getExperiment());
+        }
+
+        return pendingExperimentsList;
+    }
+
+    @Override
+    public List<Experiment> getMyJoinedExperiments() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<Participation> participationList = participationRepository.findParticipationsByParticipantUserEmailAndStatus(authentication.getName(), "joined");
+
+        List<Experiment> joinedExperimentsList = new ArrayList<>();
+
+        for(int i = 0; i < participationList.size(); i++){
+            joinedExperimentsList.add(participationList.get(i).getExperiment());
+        }
+
+        return joinedExperimentsList;
+    }
+
+    @Override
+    public List<Experiment> getMyTakenExperiments() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<Participation> participationList = participationRepository.findParticipationsByParticipantUserEmailAndStatus(authentication.getName(), "taken");
+        List<Experiment> takenExperimentsList = new ArrayList<>();
+
+        for(int i = 0; i < participationList.size(); i++){
+            takenExperimentsList.add(participationList.get(i).getExperiment());
+        }
+
+        return takenExperimentsList;
     }
 
 }

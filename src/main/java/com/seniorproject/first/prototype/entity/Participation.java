@@ -34,7 +34,7 @@ public class Participation {
 
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    @JsonIgnore
+    //@JsonIgnore
     @ManyToOne(
             cascade = CascadeType.ALL
     )
@@ -46,12 +46,12 @@ public class Participation {
 
     private String participantResults;
 
-    @JsonIgnore
+    //@JsonIgnore
     public void setExperiment(Experiment experiment) {
         this.experiment = experiment;
     }
 
-    @JsonIgnore
+    //@JsonIgnore
     public Experiment getExperiment() {
         return this.experiment;
     }

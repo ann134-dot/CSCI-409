@@ -57,4 +57,6 @@ public class ParticipationController {
     public List<Participation> getExperimentTakenParticipations(@PathVariable("id") Long experimentId) throws Exception {
         return participationService.getExperimentTakenParticipations(experimentId);
     }
+
+
 }
