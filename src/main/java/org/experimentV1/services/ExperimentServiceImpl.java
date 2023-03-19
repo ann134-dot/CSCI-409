@@ -1,5 +1,6 @@
 package org.experimentV1.services;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.experimentV1.entity.Experiment;
 import org.experimentV1.repositories.ExperimentRepository;
@@ -71,10 +72,29 @@ public class ExperimentServiceImpl implements ExperimentService{
         if (experiment.getFrequencyRange() == null || experiment.getLengthOfWords() == null)
             return ResponseHandler.generateResponse("Frequency range or word length is null", HttpStatus.BAD_REQUEST, null);
         Collections.sort(experiment.getFrequencyRange());
-        experiment.setWords(
-                experimentRepository.findWordsByFrequencyRangeAndLength3(experiment.getNumberOfWords(),
-                        experiment.getFrequencyRange().get(0), experiment.getFrequencyRange().get(1))
-        );
+        List<String> words = new ArrayList<>();
+        switch (experiment.getLengthOfWords().get(0)){
+            case 3:
+                words = experimentRepository.findWordsByFrequencyRangeAndLength3(experiment.getNumberOfWords(),
+                        experiment.getFrequencyRange().get(0), experiment.getFrequencyRange().get(1));
+                break;
+            case 4:
+                words = experimentRepository.findWordsByFrequencyRangeAndLength4(experiment.getNumberOfWords(),
+                        experiment.getFrequencyRange().get(0), experiment.getFrequencyRange().get(1));
+                break;
+            case 5:
+                words = experimentRepository.findWordsByFrequencyRangeAndLength5(experiment.getNumberOfWords(),
+                        experiment.getFrequencyRange().get(0), experiment.getFrequencyRange().get(1));
+                break;
+            case 6:
+                words = experimentRepository.findWordsByFrequencyRangeAndLength6(experiment.getNumberOfWords(),
+                        experiment.getFrequencyRange().get(0), experiment.getFrequencyRange().get(1));
+                break;
+            default:
+                return ResponseHandler.generateResponse("Cannot find words with length " + experiment.getLengthOfWords().get(0), HttpStatus.BAD_REQUEST, null);
+        }
+
+        experiment.setWords(words);
         experimentRepository.save(experiment);
         return ResponseHandler.generateResponse("Experiment " + experiment.getExperimentId() +" is created", HttpStatus.OK, experiment);
 
