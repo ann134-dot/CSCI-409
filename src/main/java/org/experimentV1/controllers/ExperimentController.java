@@ -32,6 +32,28 @@ public class ExperimentController {
         return experimentService.createExperiment(experiment);
     }
 
+    @GetMapping("/getExperiment/{id}")
+    public ResponseEntity<Object> getExperimentById(@PathVariable Long id){
+        return experimentService.getExperiment(id);
+    }
+
+    @GetMapping("/getAllExperiment")
+    public ResponseEntity<Object> getAllExperiments(){
+        return experimentService.getAllExperiments();
+    }
+
+    @DeleteMapping("/deleteById")
+    public ResponseEntity<Object> deleteExperimentById(@RequestParam Long id){
+        return experimentService.deleteExperimentById(id);
+    }
+
+    // Does not work
+    @DeleteMapping("/deleteByUser")
+    public ResponseEntity<Object> deleteExperimentByUser(@RequestParam String user){
+        return experimentService.deleteExperimentByUser(user);
+    }
+
+
     // Ex: get 3 words which frequencies are between 3000 and 5000. List: {fatal, frustrate, overwhelm}
     @PostMapping("/postExperimentFrequencyRange")
     public ResponseEntity<Object> saveExperimentWithFrequencyRange(@RequestBody Experiment experiment){

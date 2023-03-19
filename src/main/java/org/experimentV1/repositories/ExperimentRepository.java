@@ -1,14 +1,24 @@
 package org.experimentV1.repositories;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.transaction.Transactional;
 import org.experimentV1.entity.Experiment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ExperimentRepository extends JpaRepository<Experiment, Long> {
+
+
+    @Transactional
+//    Optional<Experiment> deleteByExperimentId(Long id);
+    Optional<List<Experiment>> deleteByCreatedBy(String user);
+
+    Experiment findByExperimentId(Long id);
+
     @Query(value = "select word from all_words order by random() limit :numberOfWords", nativeQuery = true)
     List<String> findRandomWords(Integer numberOfWords);
 

@@ -27,8 +27,9 @@ public interface ExperimentService {
     //      frequency and length
     ResponseEntity<Object> createRandomizedExperiment(Experiment experiment);
     ResponseEntity<Object> createExperiment(Experiment experiment);
-    ResponseEntity<Object> deleteExperiment(Integer experimentId);
+    ResponseEntity<Object> deleteExperimentById(Long experimentId);
+    ResponseEntity<Object> deleteExperimentByUser(String user);
     ResponseEntity<Object> getAllExperiments();
-    ResponseEntity<Object> getExperiment(Integer experimentId);
+    ResponseEntity<Object> getExperiment(Long experimentId);
     ResponseEntity<Object> getExperimentByUser();
 }

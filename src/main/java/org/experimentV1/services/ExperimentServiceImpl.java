@@ -173,20 +173,29 @@ public class ExperimentServiceImpl implements ExperimentService{
         return ResponseHandler.generateResponse("Experiment " + experiment.getExperimentId() +" is created", HttpStatus.NOT_FOUND, experiment);
     }
 
+    @Override
+    public ResponseEntity<Object> deleteExperimentById(Long experimentId) {
+        experimentRepository.deleteById(experimentId);//.orElseThrow(()-> new RuntimeException("Cannot find Id "+experimentId));
+        return ResponseHandler.generateResponse("Experiment " + experimentId +" is deleted", HttpStatus.OK, experimentId);
+//        return ResponseHandler.generateResponse("Experiment " + experiment.getExperimentId() +" is deleted", HttpStatus.OK, experiment);
+    }
 
     @Override
-    public ResponseEntity<Object> deleteExperiment(Integer experimentId) {
+    public ResponseEntity<Object> deleteExperimentByUser(String user) {
         return null;
+//        List<Long> ids = experimentRepository.deleteByCreatedBy(user).orElseThrow(()-> new RuntimeException("Cannot find User"+user));
+//        return ResponseHandler.generateResponse("Experiment " + ids +" are deleted", HttpStatus.OK, ids);
     }
 
     @Override
     public ResponseEntity<Object> getAllExperiments() {
-        return null;
+        return ResponseHandler.generateResponse("All experiments are returned", HttpStatus.OK, experimentRepository.findAll());
     }
 
     @Override
-    public ResponseEntity<Object> getExperiment(Integer experimentId) {
-        return null;
+    public ResponseEntity<Object> getExperiment(Long experimentId) {
+        Experiment experiment = experimentRepository.findByExperimentId(experimentId);
+        return ResponseHandler.generateResponse("Experiment " + experimentId +" is returned", HttpStatus.OK, experiment);
     }
 
     @Override
