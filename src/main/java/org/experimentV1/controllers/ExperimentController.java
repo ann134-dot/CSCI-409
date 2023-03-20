@@ -51,6 +51,7 @@ public class ExperimentController {
     @DeleteMapping("/deleteByUser")
     public ResponseEntity<Object> deleteExperimentByUser(@RequestParam String user){
         return experimentService.deleteExperimentByUser(user);
+
     }
 
 

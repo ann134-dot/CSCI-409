@@ -175,16 +175,17 @@ public class ExperimentServiceImpl implements ExperimentService{
 
     @Override
     public ResponseEntity<Object> deleteExperimentById(Long experimentId) {
+        if(experimentRepository.findByExperimentId(experimentId) == null)
+            return ResponseHandler.generateResponse("Experiment " + experimentId +" is not found", HttpStatus.NOT_FOUND, experimentId);
         experimentRepository.deleteById(experimentId);//.orElseThrow(()-> new RuntimeException("Cannot find Id "+experimentId));
         return ResponseHandler.generateResponse("Experiment " + experimentId +" is deleted", HttpStatus.OK, experimentId);
-//        return ResponseHandler.generateResponse("Experiment " + experiment.getExperimentId() +" is deleted", HttpStatus.OK, experiment);
     }
 
     @Override
     public ResponseEntity<Object> deleteExperimentByUser(String user) {
-        return null;
-//        List<Long> ids = experimentRepository.deleteByCreatedBy(user).orElseThrow(()-> new RuntimeException("Cannot find User"+user));
-//        return ResponseHandler.generateResponse("Experiment " + ids +" are deleted", HttpStatus.OK, ids);
+//        return null;
+        List<Long> ids = experimentRepository.deleteByCreatedBy(user);//.orElseThrow(()-> new RuntimeException("Cannot find User"+user));
+        return ResponseHandler.generateResponse("Experiment " + ids +" are deleted", HttpStatus.OK, ids);
     }
 
     @Override
@@ -195,6 +196,8 @@ public class ExperimentServiceImpl implements ExperimentService{
     @Override
     public ResponseEntity<Object> getExperiment(Long experimentId) {
         Experiment experiment = experimentRepository.findByExperimentId(experimentId);
+        if (experiment == null)
+            return ResponseHandler.generateResponse("Experiment " + experimentId +" is not found", HttpStatus.NOT_FOUND, experimentId);
         return ResponseHandler.generateResponse("Experiment " + experimentId +" is returned", HttpStatus.OK, experiment);
     }
 

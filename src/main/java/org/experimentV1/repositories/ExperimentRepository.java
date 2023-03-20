@@ -14,8 +14,7 @@ public interface ExperimentRepository extends JpaRepository<Experiment, Long> {
 
 
     @Transactional
-//    Optional<Experiment> deleteByExperimentId(Long id);
-    Optional<List<Experiment>> deleteByCreatedBy(String user);
+    List<Long> deleteByCreatedBy(String user);
 
     Experiment findByExperimentId(Long id);
 
