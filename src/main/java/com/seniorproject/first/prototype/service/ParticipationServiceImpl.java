@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -68,17 +69,11 @@ public class ParticipationServiceImpl implements ParticipationService{
         if(participationRepository.findParticipationByParticipantUserEmailAndExperiment_ExperimentIdAndStatus(authentication.getName(), experimentId, "taken") != null){
             throw new Exception("You have already taken the experiment");
         }
-        StringBuilder sb = new StringBuilder();
+
         for(int i = 0; i < experiment.getWords().size(); i++){
             if(postParticipateRequest.getParticipantResponseList().contains(experiment.getWords().get(i))){
-                if(experiment.getOverallResults().get(i) == null){
-                    experiment.getOverallResults().put(i, 1);
-                }else {
-                    experiment.getOverallResults().put(i, experiment.getOverallResults().get(i) + 1);
-                }
-                sb.append("1");
-            } else{
-                sb.append("0");
+                experiment.getOverallResults().set(i, experiment.getOverallResults().get(i) + 1);
+                participation.getParticipantResults().set(i, participation.getParticipantResults().get(i) + 1);
             }
         }
 
@@ -86,7 +81,6 @@ public class ParticipationServiceImpl implements ParticipationService{
         //experiment.getParticipations().add(participation);
         experimentRepository.save(experiment);
 
-        participation.setParticipantResults(sb.reverse().toString());
         participation.setExperiment(experiment);
         participation.setStatus("taken");
 
@@ -109,6 +103,12 @@ public class ParticipationServiceImpl implements ParticipationService{
         participation.setParticipant(participant);
         participation.setStatus("pending");
         participation.setExperiment(experimentRepository.findByExperimentId(experimentId));
+
+        List<Integer> participantResults = new ArrayList<>();
+        for(int i = 0; i < experiment.getWords().size(); i++){
+            participantResults.add(0);
+        }
+        participation.setParticipantResults(participantResults);
 
         return participationRepository.save(participation);
     }
@@ -135,6 +135,43 @@ public class ParticipationServiceImpl implements ParticipationService{
 
         participation.setStatus("joined");
         return participationRepository.save(participation);
+    }
+
+    @Override
+    public Participation postRejectJoinRequest(Long participationId) throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Participation participation = participationRepository.findById(participationId).get();
+
+        Experiment experiment = experimentRepository.findByExperimentId(participation.getExperiment().getExperimentId());
+        if(!authentication.getName().equals(experiment.getCreator().getUserEmail())){
+            throw new Exception("Can not access someone else's experiment");
+        }
+
+        participation.setStatus("rejected");
+        return participationRepository.save(participation);
+    }
+
+    @Override
+    public List<Participation> getMyParticipationRequests() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        List<Participation> userParticipationRequests = new ArrayList<>();
+        List<Participation> pendingRequests = participationRepository.findParticipationsByParticipantUserEmailAndStatus(authentication.getName(), "pending");
+        List<Participation> acceptedRequests = participationRepository.findParticipationsByParticipantUserEmailAndStatus(authentication.getName(), "joined");
+        List<Participation> rejectedRequests = participationRepository.findParticipationsByParticipantUserEmailAndStatus(authentication.getName(), "rejected");
+
+        userParticipationRequests.addAll(acceptedRequests);
+        userParticipationRequests.addAll(pendingRequests);
+        userParticipationRequests.addAll(rejectedRequests);
+
+        return userParticipationRequests;
+    }
+
+    @Override
+    public List<Participation> getMyTakenParticipations() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        return participationRepository.findParticipationsByParticipantUserEmailAndStatus(authentication.getName(), "taken");
     }
 
     @Override

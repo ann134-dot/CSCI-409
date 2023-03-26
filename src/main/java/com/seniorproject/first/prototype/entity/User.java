@@ -2,7 +2,10 @@ package com.seniorproject.first.prototype.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.seniorproject.first.prototype.token.Token;
+import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import lombok.*;
+import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,17 +47,18 @@ public class User implements UserDetails {
     private String gender;
     private String degree;
 
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    @JsonManagedReference
+//    @Getter(AccessLevel.NONE)
+//    @Setter(AccessLevel.NONE)
+//    @JsonManagedReference
     @JsonIgnore
     @OneToMany(
-            mappedBy = "creator"
+            mappedBy = "creator",
+            fetch = FetchType.LAZY
     )
     private List<Experiment> createdExperiments;
 
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
+//    @Getter(AccessLevel.NONE)
+//    @Setter(AccessLevel.NONE)
     @JsonIgnore
     @OneToMany(
             mappedBy = "participant",
@@ -64,6 +68,10 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -95,23 +103,23 @@ public class User implements UserDetails {
         return true;
     }
 
-    @JsonIgnore
-    public List<Experiment> getCreatedExperiments() {
-        return this.createdExperiments;
-    }
-
-    @JsonIgnore
-    public void setCreatedExperiments(List<Experiment> createdExperiments) {
-        this.createdExperiments = createdExperiments;
-    }
-
-    @JsonIgnore
-    public void setParticipatedExperiments(List<Participation> participatedExperiments) {
-        this.participatedExperiments = participatedExperiments;
-    }
-
-    @JsonIgnore
-    public List<Participation> getParticipatedExperiments() {
-        return participatedExperiments;
-    }
+//    @JsonIgnore
+//    public List<Experiment> getCreatedExperiments() {
+//        return this.createdExperiments;
+//    }
+//
+//    @JsonIgnore
+//    public void setCreatedExperiments(List<Experiment> createdExperiments) {
+//        this.createdExperiments = createdExperiments;
+//    }
+//
+//    @JsonIgnore
+//    public void setParticipatedExperiments(List<Participation> participatedExperiments) {
+//        this.participatedExperiments = participatedExperiments;
+//    }
+//
+//    @JsonIgnore
+//    public List<Participation> getParticipatedExperiments() {
+//        return participatedExperiments;
+//    }
 }

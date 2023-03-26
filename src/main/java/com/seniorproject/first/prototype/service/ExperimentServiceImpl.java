@@ -28,9 +28,9 @@ public class ExperimentServiceImpl implements ExperimentService{
     @Override
     public Experiment createExperiment(Experiment experiment) {
 
-        Map<Integer, Integer> overallResults = new HashMap<>();
+        List<Integer> overallResults = new ArrayList<>();
         for(int i = 0; i < experiment.getWords().size(); i++){
-            overallResults.put(i, 0);
+            overallResults.add(0);
         }
         experiment.setOverallResults(overallResults);
         experiment.setParticipantCount((long)0);

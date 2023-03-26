@@ -40,6 +40,10 @@ public class ParticipationController {
     public Participation postAcceptJoinRequest(@PathVariable("id") Long participationId) throws Exception {
         return participationService.postAcceptJoinRequest(participationId);
     }
+    @PostMapping("myCreatedExperiments/pending-requests/reject-request/{id}")
+    public Participation postrejectJoinRequest(@PathVariable("id") Long participationId) throws Exception {
+        return participationService.postRejectJoinRequest(participationId);
+    }
 
     //taking the experiment
 
@@ -58,5 +62,13 @@ public class ParticipationController {
         return participationService.getExperimentTakenParticipations(experimentId);
     }
 
+    @GetMapping("/myRequests")
+    public List<Participation> getMyParticipationRequests(){
+        return participationService.getMyParticipationRequests();
+    }
 
+    @GetMapping("/myTakenParticipations")
+    public List<Participation> getMyTakenParticipations(){
+        return participationService.getMyTakenParticipations();
+    }
 }

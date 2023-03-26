@@ -1,32 +1,23 @@
 package com.seniorproject.first.prototype.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.seniorproject.first.prototype.util.ExperimentOverallResultsConverter;
-import com.seniorproject.first.prototype.util.ExperimentWordsConverter;
+import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import lombok.*;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
-import java.util.Map;
 
 @Entity
-//@TypeDef(
-//        name = "list-array",
-//        typeClass = ListArrayType.class
-//)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder // mb will delete
-//@Table(
-//        name = "experiments",
-//        uniqueConstraints = @UniqueConstraint(
-//                name = "email_unique",
-//                columnNames =
-//        )
-//)
+
+@TypeDef(name = "list-array", typeClass = ListArrayType.class)
 public class Experiment {
     @Id
     @SequenceGenerator(
@@ -39,26 +30,42 @@ public class Experiment {
             generator = "experimentId_sequence"
     )
     private Long experimentId;
+    @Size(min = 2, max = 100, message = "The name must be between 2 and 100 characters.")
+    @NotNull(message = "Please provide a name")
     private String experimentName;
+
+    @Size(max = 500, message = "The description can't be longer than 500 characters.")
+    @NotNull(message = "Please, provide a description")
     private String description;
+
+    @NotNull(message = "Please, provide amount of delay between words")
     private Double betweenWordTime;
+
+    @NotNull(message = "Please, provide word display time")
     private Double wordTime;
+
+    @NotNull(message = "Please, set the isJoinable parameter")
     private Boolean isJoinable;
 
     @SuppressWarnings("JpaAttributeTypeInspection") // bc of ide issue
-    @Convert(converter = ExperimentWordsConverter.class)
-    private Map<Integer, String> words;
+    @Type(type = "list-array")
+    @Column(
+        columnDefinition = "text[]"
+    )
+    private List<String> words;
 
     private Long participantCount;
 
-
     @SuppressWarnings("JpaAttributeTypeInspection")
-    @Convert(converter = ExperimentOverallResultsConverter.class)
-    private Map<Integer, Integer> overallResults;
+    @Type(type = "list-array")
+    @Column(
+            columnDefinition = "integer[]"
+    )
+    private List<Integer> overallResults;
 
     private Long experimentType;
 
-    @JsonBackReference
+    //@JsonBackReference 26.03
     @ManyToOne(
             cascade = CascadeType.ALL
     )
@@ -68,8 +75,8 @@ public class Experiment {
     )
     private User creator;
 
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
+//    @Getter(AccessLevel.NONE) 26.03
+//    @Setter(AccessLevel.NONE)
     @JsonIgnore
     @OneToMany(
             mappedBy = "experiment",
@@ -77,12 +84,12 @@ public class Experiment {
     )
     private List<Participation> participations;
 
-    @JsonIgnore
-    public List<Participation> getParticipations() {
-        return this.participations;
-    }
-    @JsonIgnore
-    public void setParticipations(List<Participation> participations) {
-        this.participations = participations;
-    }
+//    @JsonIgnore
+//    public List<Participation> getParticipations() {
+//        return this.participations;
+//    }
+//    @JsonIgnore
+//    public void setParticipations(List<Participation> participations) {
+//        this.participations = participations;
+//    }
 }
