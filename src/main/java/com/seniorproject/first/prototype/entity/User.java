@@ -6,11 +6,15 @@ import com.seniorproject.first.prototype.token.Token;
 import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import lombok.*;
 import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import java.util.Collection;
 import java.util.List;
 
@@ -39,10 +43,16 @@ public class User implements UserDetails {
             nullable = false,
             unique = true
     )
+    @Email
     private String userEmail;
+    @NotBlank
     private String firstName;
+    @NotBlank
     private String lastName;
+    @NotBlank
+    @Length(min = 8)
     private String password;
+    @Positive
     private Long age;
     private String gender;
     private String degree;

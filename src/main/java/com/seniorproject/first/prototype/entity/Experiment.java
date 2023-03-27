@@ -66,6 +66,7 @@ public class Experiment {
     private Long experimentType;
 
     //@JsonBackReference 26.03
+
     @ManyToOne(
             cascade = CascadeType.ALL
     )
@@ -74,9 +75,9 @@ public class Experiment {
             referencedColumnName = "userId"
     )
     private User creator;
-
 //    @Getter(AccessLevel.NONE) 26.03
 //    @Setter(AccessLevel.NONE)
+
     @JsonIgnore
     @OneToMany(
             mappedBy = "experiment",
@@ -84,6 +85,9 @@ public class Experiment {
     )
     private List<Participation> participations;
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
 //    @JsonIgnore
 //    public List<Participation> getParticipations() {
 //        return this.participations;

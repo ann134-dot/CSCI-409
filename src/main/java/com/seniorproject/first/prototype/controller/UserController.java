@@ -21,8 +21,8 @@ public class UserController {
 //    public User addUser(@RequestBody User user){
 //        return userService.addUser(user);
 //    }
-    @GetMapping("my-created-experiments")
-    public List<Experiment> fetchMyCreatedExperiments(){
+    @GetMapping("/my-created-experiments")
+    public List<Experiment> fetchMyCreatedExperiments(){ // move this to the experiment controller
         return userService.fetchMyCreatedExperiments();
     }
 

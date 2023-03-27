@@ -11,10 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ExperimentServiceImpl implements ExperimentService{
@@ -88,6 +85,48 @@ public class ExperimentServiceImpl implements ExperimentService{
         }
 
         return takenExperimentsList;
+    }
+
+    @Override
+    public void deleteMyCreatedExperimentById(Long experimentId) throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Experiment experiment = experimentRepository.findByExperimentId(experimentId);
+        if(!authentication.getName().equals(experiment.getCreator().getUserEmail())){
+            throw new Exception("Experiment was created by a different user");
+        }
+        else {
+            experimentRepository.deleteById(experimentId);
+        }
+    }
+
+    @Override
+    public Experiment updateMyCreatedExperimentById(Long experimentId, Experiment experiment) throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Experiment dbExperiment = experimentRepository.findByExperimentId(experimentId);
+        if(!authentication.getName().equals(experiment.getCreator().getUserEmail())){
+            throw new Exception("Experiment was created by a different user");
+        }
+        else {
+            //Update name
+            if(Objects.nonNull(experiment.getExperimentName()) && !"".equalsIgnoreCase(experiment.getExperimentName())){
+                dbExperiment.setExperimentName(experiment.getExperimentName());
+            }
+            //update description
+            if(Objects.nonNull(experiment.getDescription()) && !"".equalsIgnoreCase(experiment.getDescription())){
+                dbExperiment.setDescription(experiment.getDescription());
+            }
+            //toggle isJoinable
+            if(experiment.getIsJoinable() != dbExperiment.getIsJoinable()){
+                dbExperiment.setIsJoinable(!dbExperiment.getIsJoinable());
+            }
+        }
+        return experimentRepository.save(dbExperiment);
+    }
+
+    //to be implemented
+    @Override
+    public Experiment getMyCreatedExperimentByExperimentName(String experimentName) {
+        return experimentRepository.findByExperimentNameIgnoreCase(experimentName);
     }
 
 }

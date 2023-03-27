@@ -28,19 +28,19 @@ public class ParticipationController {
     }
 
     //joining the experiment
-    @PostMapping("experiments-byEmail/join/{id}")
+    @PostMapping("/experiments-byEmail/join/{id}")
     public Participation postJoin(@PathVariable("id") Long experimentId) throws Exception {
         return participationService.postJoin(experimentId);
     }
-    @GetMapping("myCreatedExperiments/pending-requests/{id}")
+    @GetMapping("/myCreatedExperiments/pending-requests/{id}")
     public List<Participation> getExperimentPendingRequests(@PathVariable("id") Long experimentId) throws Exception {
         return participationService.getExperimentPendingRequests(experimentId);
     }
-    @PostMapping("myCreatedExperiments/pending-requests/accept-request/{id}")
+    @PostMapping("/myCreatedExperiments/pending-requests/accept-request/{id}")
     public Participation postAcceptJoinRequest(@PathVariable("id") Long participationId) throws Exception {
         return participationService.postAcceptJoinRequest(participationId);
     }
-    @PostMapping("myCreatedExperiments/pending-requests/reject-request/{id}")
+    @PostMapping("/myCreatedExperiments/pending-requests/reject-request/{id}")
     public Participation postrejectJoinRequest(@PathVariable("id") Long participationId) throws Exception {
         return participationService.postRejectJoinRequest(participationId);
     }
@@ -52,12 +52,12 @@ public class ParticipationController {
         return participationService.postParticipate(postParticipateRequest, experimentId);
     }
 
-    @GetMapping("myCreatedExperiments/joined/{id}")
+    @GetMapping("/myCreatedExperiments/joined/{id}")
     public List<Participation> getExperimentJoinedParticipations(@PathVariable("id") Long experimentId) throws Exception {
         return participationService.getExperimentJoinedParticipations(experimentId);
     }
 
-    @GetMapping("myCreatedExperiments/taken/{id}")
+    @GetMapping("/myCreatedExperiments/taken/{id}")
     public List<Participation> getExperimentTakenParticipations(@PathVariable("id") Long experimentId) throws Exception {
         return participationService.getExperimentTakenParticipations(experimentId);
     }

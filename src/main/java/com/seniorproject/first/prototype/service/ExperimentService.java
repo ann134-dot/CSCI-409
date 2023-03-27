@@ -16,4 +16,10 @@ public interface ExperimentService {
     public List<Experiment> getMyJoinedExperiments();
 
     public List<Experiment> getMyTakenExperiments();
+
+    public void deleteMyCreatedExperimentById(Long experimentId) throws Exception;
+
+    public Experiment updateMyCreatedExperimentById(Long experimentId, Experiment experiment) throws Exception;
+
+    public Experiment getMyCreatedExperimentByExperimentName(String experimentName);
 }

@@ -10,4 +10,6 @@ import java.util.List;
 public interface ExperimentRepository extends JpaRepository<Experiment, Long> {
     public List<Experiment> findByCreatorUserIdAndIsJoinable(Long userId, Boolean isPublic);
     public Experiment findByExperimentId(Long experimentId);
+
+    public Experiment findByExperimentNameIgnoreCase(String experimentName);
 }
