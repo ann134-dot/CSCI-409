@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 public interface ParticipationService {
-    public List<Experiment> findExperimentsByEmail(ExperimentsByEmailRequest experimentsByEmailRequest);
+    public List<Experiment> findExperimentsByEmail(String creatorEmail);
 
     public Experiment getParticipate(Long experimentId) throws Exception;
 
