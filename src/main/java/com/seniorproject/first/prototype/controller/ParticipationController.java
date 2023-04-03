@@ -17,9 +17,9 @@ public class ParticipationController {
     @Autowired
     private ParticipationService participationService;
 
-    @GetMapping("/experiments-byEmail")
-    public List<Experiment> findExperimentsByEmail(@RequestBody ExperimentsByEmailRequest experimentsByEmailRequest){
-        return participationService.findExperimentsByEmail(experimentsByEmailRequest);
+    @GetMapping("/experiments-byEmail/{email}")
+    public List<Experiment> findExperimentsByEmail(@PathVariable("email") String creatorEmail){
+        return participationService.findExperimentsByEmail(creatorEmail);
     }
 
     @GetMapping("/experiments-byEmail/participate/{id}")
