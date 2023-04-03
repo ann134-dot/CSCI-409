@@ -47,6 +47,15 @@ public class Experiment {
     @NotNull(message = "Please, set the isJoinable parameter")
     private Boolean isJoinable;
 
+    private Integer numberOfWords;
+    @Type(type = "list-array")
+    @Column(
+            columnDefinition = "integer[]"
+    )
+    private List<Integer> frequencyRange;
+    private Integer lengthOfWords;
+
+
     @SuppressWarnings("JpaAttributeTypeInspection") // bc of ide issue
     @Type(type = "list-array")
     @Column(
@@ -62,8 +71,6 @@ public class Experiment {
             columnDefinition = "integer[]"
     )
     private List<Integer> overallResults;
-
-    private Long experimentType;
 
     //@JsonBackReference 26.03
 
@@ -85,15 +92,4 @@ public class Experiment {
     )
     private List<Participation> participations;
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-//    @JsonIgnore
-//    public List<Participation> getParticipations() {
-//        return this.participations;
-//    }
-//    @JsonIgnore
-//    public void setParticipations(List<Participation> participations) {
-//        this.participations = participations;
-//    }
 }

@@ -1,15 +1,22 @@
 package com.seniorproject.first.prototype.service;
 
 import com.seniorproject.first.prototype.entity.Experiment;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public interface ExperimentService {
-    public Experiment createExperiment(Experiment experiment);
+    ResponseEntity<Object> createExperiment(Experiment experiment);
+    ResponseEntity<Object> createRandomizedExperiment(Experiment experiment);
+    ResponseEntity<Object> createExperimentLengthAndFrequency(Experiment experiment);
 
-    public Experiment getMyCreatedExperimentById(Long experimentId);
+    ResponseEntity<Object> getMyExperimentById(Long experimentId);
+
+    ResponseEntity<Object> getAllMyExperiments();
+    ResponseEntity<Object> getAllExperiments();
+    public ResponseEntity<Object> getMyCreatedExperimentByExperimentName(String experimentName);
 
     public List<Experiment> getMyPendingJoinExperiments();
 
@@ -17,9 +24,11 @@ public interface ExperimentService {
 
     public List<Experiment> getMyTakenExperiments();
 
-    public void deleteMyCreatedExperimentById(Long experimentId) throws Exception;
+    ResponseEntity<Object> deleteMyCreatedExperimentById(Long experimentId);
 
     public Experiment updateMyCreatedExperimentById(Long experimentId, Experiment experiment) throws Exception;
 
-    public Experiment getMyCreatedExperimentByExperimentName(String experimentName);
+
+
+
 }

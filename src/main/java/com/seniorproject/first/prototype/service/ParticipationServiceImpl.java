@@ -30,9 +30,25 @@ public class ParticipationServiceImpl implements ParticipationService{
 
     @Override
     public List<Experiment> findExperimentsByEmail(ExperimentsByEmailRequest experimentsByEmailRequest) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long creatorId = userRepository.findUserByUserEmail(experimentsByEmailRequest.getEmail()).get().getUserId();
         List<Experiment> experiments = experimentRepository.findByCreatorUserIdAndIsJoinable(creatorId, Boolean.TRUE);
-        return experiments;
+
+        List<Experiment> result = new ArrayList<>();
+
+        for(int i = 0; i < experiments.size(); i++){
+            Experiment currExp = experiments.get(i);
+            if(currExp.getCreator().getUserEmail().equals(authentication.getName())){
+                continue;
+            }
+            if(participationRepository.findParticipationByParticipantUserEmailAndExperiment_ExperimentId(authentication.getName(), currExp.getExperimentId()) != null){
+                continue;
+            } else {
+                result.add(currExp);
+            }
+        }
+
+        return result;
     }
 
     @Override

@@ -3,19 +3,44 @@ package com.seniorproject.first.prototype.controller;
 import com.seniorproject.first.prototype.entity.Experiment;
 import com.seniorproject.first.prototype.service.ExperimentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/v2/experiment")
 public class ExperimentController {
 
-    @Autowired
-    private ExperimentService experimentService;
+    private final ExperimentService experimentService;
 
-    @PostMapping("/create-experiment")
-    public Experiment createExperiment(@RequestBody Experiment experiment){
+    @Autowired
+    public ExperimentController(ExperimentService experimentService) {
+        this.experimentService = experimentService;
+    }
+
+    @PostMapping("/postExperiment")
+    public ResponseEntity<Object> createExperiment(@RequestBody Experiment experiment){
         return experimentService.createExperiment(experiment);
+    }
+
+    @PostMapping("/postRandomV2")
+    public ResponseEntity<Object> createExperimentWithRandomWords(@RequestBody Experiment experiment){
+        return experimentService.createRandomizedExperiment(experiment);
+    }
+
+    @PostMapping("/postExperimentWithParam")
+    public ResponseEntity<Object> createExperimentWithLengthAndFrequency(@RequestBody Experiment experiment){
+        return experimentService.createExperimentLengthAndFrequency(experiment);
+    }
+
+    @GetMapping("/myCreatedExperiments/{id}")
+    public ResponseEntity<Object> getMyCreatedExperimentById(@PathVariable("id") Long experimentId){
+        return experimentService.getMyExperimentById(experimentId);
+    }
+    @GetMapping("/myCreatedExperiments")
+    public ResponseEntity<Object> getMyCreatedExperiments(){
+        return experimentService.getAllMyExperiments();
     }
 
     @GetMapping("/UserPendingJoinExperiments")
@@ -33,16 +58,12 @@ public class ExperimentController {
         return experimentService.getMyTakenExperiments();
     }
 
-    @GetMapping("/myCreatedExperiments/{id}")
-    public Experiment getMyCreatedExperimentById(@PathVariable("id") Long experimentId){
-        return experimentService.getMyCreatedExperimentById(experimentId);
-    }
 
-    //check the cascading options
+
+    //TODO check the cascading options
     @DeleteMapping("/myCreatedExperiments/{id}")
-    public String deleteMyCreatedExperimentById(@PathVariable("id") Long experimentId) throws Exception {
-        experimentService.deleteMyCreatedExperimentById(experimentId);
-        return "Experiment deleted successfully!";
+    public ResponseEntity<Object>  deleteMyCreatedExperimentById(@PathVariable("id") Long experimentId) throws Exception {
+        return experimentService.deleteMyCreatedExperimentById(experimentId);
     }
 
     @PutMapping("/myCreatedExperiments/{id}")
@@ -51,7 +72,7 @@ public class ExperimentController {
     }
 
     @GetMapping("/myCreatedExperiments/name/{name}")
-    public Experiment getMyCreatedExperimentByExperimentName(@PathVariable("name") String experimentName){
+    public ResponseEntity<Object> getMyCreatedExperimentByExperimentName(@PathVariable("name") String experimentName){
         return experimentService.getMyCreatedExperimentByExperimentName(experimentName);
     }
 }
