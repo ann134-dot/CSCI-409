@@ -13,6 +13,7 @@ public interface ExperimentService {
     ResponseEntity<Object> createExperimentLengthAndFrequency(Experiment experiment);
 
     ResponseEntity<Object> getMyExperimentById(Long experimentId);
+    ResponseEntity<Object> getMyExperimentByEmail(String email);
 
     ResponseEntity<Object> getAllMyExperiments();
     ResponseEntity<Object> getAllExperiments();

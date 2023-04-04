@@ -27,7 +27,7 @@ public class Participation {
             generator = "participationId_sequence"
     )
     private Long participationId;
-    private String status;
+    private ParticipantStatus status;
     @ManyToOne(
             cascade = CascadeType.ALL
     )

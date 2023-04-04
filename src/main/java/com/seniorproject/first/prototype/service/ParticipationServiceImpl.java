@@ -1,6 +1,7 @@
 package com.seniorproject.first.prototype.service;
 
 import com.seniorproject.first.prototype.entity.Experiment;
+import com.seniorproject.first.prototype.entity.ParticipantStatus;
 import com.seniorproject.first.prototype.entity.Participation;
 import com.seniorproject.first.prototype.entity.User;
 import com.seniorproject.first.prototype.model.ExperimentsByEmailRequest;
@@ -98,7 +99,7 @@ public class ParticipationServiceImpl implements ParticipationService{
         experimentRepository.save(experiment);
 
         participation.setExperiment(experiment);
-        participation.setStatus("taken");
+        participation.setStatus(ParticipantStatus.TAKEN);
 
         return participationRepository.save(participation);
     }
@@ -117,7 +118,7 @@ public class ParticipationServiceImpl implements ParticipationService{
         Participation participation = new Participation();
         User participant = userRepository.findUserByUserEmail(authentication.getName()).get();
         participation.setParticipant(participant);
-        participation.setStatus("pending");
+        participation.setStatus(ParticipantStatus.PENDING);
         participation.setExperiment(experimentRepository.findByExperimentId(experimentId));
 
         List<Integer> participantResults = new ArrayList<>();
@@ -149,7 +150,7 @@ public class ParticipationServiceImpl implements ParticipationService{
             throw new Exception("Can not access someone else's experiment");
         }
 
-        participation.setStatus("joined");
+        participation.setStatus(ParticipantStatus.JOINED);
         return participationRepository.save(participation);
     }
 
@@ -163,7 +164,7 @@ public class ParticipationServiceImpl implements ParticipationService{
             throw new Exception("Can not access someone else's experiment");
         }
 
-        participation.setStatus("rejected");
+        participation.setStatus(ParticipantStatus.REJECTED);
         return participationRepository.save(participation);
     }
 

@@ -139,6 +139,26 @@ public class ExperimentServiceImpl implements ExperimentService{
     }
 
     @Override
+    public ResponseEntity<Object> getMyExperimentByEmail(String email) {
+        return null;
+//        User user = userRepository.findUserByUserEmail(email).get();
+//        List<Experiment> experiments = experimentRepository.findAllByCreator(user);
+//
+//        List<Map<Long, String>> experimentNames;
+//
+//        for(Experiment experiment : experiments){
+//            Map<String, String> name = new HashMap<>();
+//            name.put(experiment.getExperimentId(), experiment.getExperimentName());
+//
+//            experimentNames.add(new Map<String, String>() {
+//
+//            })
+//        }
+//
+//        return ResponseHandler.generateResponse("Experiment " + experiment.getExperimentId() +" is returned", HttpStatus.OK, experiment);
+    }
+
+    @Override
     public ResponseEntity<Object> getAllMyExperiments() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserName = authentication.getName();
