@@ -3,9 +3,13 @@ package com.seniorproject.first.prototype.service;
 import com.seniorproject.first.prototype.entity.Experiment;
 import com.seniorproject.first.prototype.entity.User;
 //import com.seniorproject.first.prototype.model.UserModel;
+import com.seniorproject.first.prototype.model.UserInfo;
 import com.seniorproject.first.prototype.repository.UserRepository;
+import com.seniorproject.first.prototype.util.ResponseHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -47,6 +51,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         String currentUserName = authentication.getName();
         User user = userRepository.findUserByUserEmail(currentUserName).get();
         return user.getCreatedExperiments();
+    }
+
+    @Override
+    public ResponseEntity<Object> getMyUserInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findUserByUserEmail(authentication.getName()).get();
+        UserInfo userInfo = new UserInfo(user.getUserEmail(), user.getFirstName(), user.getLastName(), user.getAge(), user.getGender(), user.getDegree());
+        return ResponseHandler.generateResponse("Returning userInfo for the currently logged in user", HttpStatus.OK, userInfo);
     }
 
 //    @Override
