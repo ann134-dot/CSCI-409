@@ -16,11 +16,11 @@ public class ParticipationController {
 
     @Autowired
     private ParticipationService participationService;
-
-    @GetMapping("/experiments-byEmail/{email}")
-    public List<Experiment> findExperimentsByEmail(@PathVariable("email") String creatorEmail){
-        return participationService.findExperimentsByEmail(creatorEmail);
-    }
+//moved to ExperimentController
+//    @GetMapping("/experiments-byEmail/{email}")
+//    public List<Experiment> findExperimentsByEmail(@PathVariable("email") String creatorEmail){
+//        return participationService.findExperimentsByEmail(creatorEmail);
+//    }
 
     @GetMapping("/experiments-byEmail/participate/{id}")
     public Experiment getParticpate(@PathVariable("id") Long experimentId) throws Exception {

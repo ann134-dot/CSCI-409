@@ -8,10 +8,11 @@ import java.util.List;
 
 @Repository
 public interface ParticipationRepository extends JpaRepository<Participation, Long> {
-    public List<Participation> findParticipationsByExperimentExperimentIdAndStatus(Long experimentId, String status);
-    public Participation findParticipationByParticipantUserEmailAndExperiment_ExperimentIdAndStatus(String userEmail, Long experimentId, String status);
+    List<Participation> findParticipationsByExperimentExperimentIdAndStatus(Long experimentId, String status);
+    Participation findParticipationByParticipantUserEmailAndExperiment_ExperimentIdAndStatus(String userEmail, Long experimentId, String status);
 
-    public Participation findParticipationByParticipantUserEmailAndExperiment_ExperimentId(String userEmail, Long experimentId);
+    List<Participation> findParticipationByExperiment_ExperimentId(Long experimentId);
+    Participation findParticipationByParticipantUserEmailAndExperiment_ExperimentId(String userEmail, Long experimentId);
 
     List<Participation> findParticipationsByParticipantUserEmailAndStatus(String userEmail, String status);
 }

@@ -76,8 +76,13 @@ public class ExperimentController {
         return experimentService.updateMyCreatedExperimentById(experimentId, experiment);
     }
 
-    @GetMapping("/myCreatedExperiments/name/{name}")
+    @GetMapping("/myCreatedExperiments/{name}")
     public ResponseEntity<Object> getMyCreatedExperimentByExperimentName(@PathVariable("name") String experimentName){
         return experimentService.getMyCreatedExperimentByExperimentName(experimentName);
+    }
+
+    @GetMapping("/experiments/{email}")
+    public ResponseEntity<Object> findExperimentsByEmail(@PathVariable("email") String creatorEmail){
+        return experimentService.getExperimentsByEmail(creatorEmail);
     }
 }

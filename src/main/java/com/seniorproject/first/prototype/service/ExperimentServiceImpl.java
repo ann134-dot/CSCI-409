@@ -141,8 +141,28 @@ public class ExperimentServiceImpl implements ExperimentService{
     }
 
     @Override
-    public ResponseEntity<Object> getMyExperimentByEmail(String email) {
-        return null;
+    public ResponseEntity<Object> getExperimentsByEmail(String email) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(email.equals(authentication.getName())){
+            return ResponseHandler.generateResponse("Email is your email. Please, navigate to /getMyExperiments to see your created experiments.", HttpStatus.BAD_REQUEST, null);
+        }
+        Long creatorId = userRepository.findUserByUserEmail(email).get().getUserId();
+        List<Experiment> experiments = experimentRepository.findByCreatorUserIdAndIsJoinable(creatorId, Boolean.TRUE);
+
+        List<Experiment> result = new ArrayList<>();
+
+        for(int i = 0; i < experiments.size(); i++){
+            Experiment currExp = experiments.get(i);
+            if(participationRepository.findParticipationByParticipantUserEmailAndExperiment_ExperimentId(authentication.getName(), currExp.getExperimentId()) != null){
+                continue;
+            } else {
+                // hides user info
+                currExp.setCreator(null);
+                result.add(currExp);
+            }
+        }
+        return ResponseHandler.generateResponse("Experiments with email " + email , HttpStatus.OK, result);
+
 //        User user = userRepository.findUserByUserEmail(email).get();
 //        List<Experiment> experiments = experimentRepository.findAllByCreator(user);
 //
@@ -174,7 +194,22 @@ public class ExperimentServiceImpl implements ExperimentService{
     //TODO get all experiments in which the user has not participated and has not sent join request
     @Override
     public ResponseEntity<Object> getAllExperiments() {
-        return ResponseHandler.generateResponse("Returning all the available experiments", HttpStatus.OK, experimentRepository.findAll());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        List<Experiment> experiments = experimentRepository.findAll();
+        List<Experiment> result = new ArrayList<>();
+
+        for(int i = 0; i < experiments.size(); i++){
+            Experiment currExp = experiments.get(i);
+            if(currExp.getCreator().getUserEmail().equals(authentication.getName()))
+                continue;
+          //  participationRepository.findParticipationByExperiment_ExperimentId(currExp.getExperimentId());
+            if(participationRepository.findParticipationByParticipantUserEmailAndExperiment_ExperimentId(authentication.getName(), currExp.getExperimentId()) != null)
+                continue;
+            // hides user info
+
+
+        }
+        return ResponseHandler.generateResponse("Returning all the available experiments", HttpStatus.OK, result);
     }
 
     @Override
