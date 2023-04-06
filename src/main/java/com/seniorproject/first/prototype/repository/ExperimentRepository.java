@@ -15,6 +15,7 @@ public interface ExperimentRepository extends JpaRepository<Experiment, Long> {
 
     List<Experiment> findByExperimentNameIgnoreCaseAndCreator(String experimentName, User user);
     List<Experiment> findAllByCreator(User user);
+    List<Experiment> findAll();
 
     @Query(value = "select word from all_words order by random() limit :numberOfWords", nativeQuery = true)
     List<String> findRandomWords(Integer numberOfWords);
