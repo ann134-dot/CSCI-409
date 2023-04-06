@@ -126,6 +126,8 @@ public class ExperimentServiceImpl implements ExperimentService{
     }
 
 
+    //Method that returns all the experiments
+
     @Override
     public ResponseEntity<Object> getMyExperimentById(Long experimentId) {
         Experiment experiment = experimentRepository.findByExperimentId(experimentId);
@@ -172,7 +174,7 @@ public class ExperimentServiceImpl implements ExperimentService{
     //TODO get all experiments in which the user has not participated and has not sent join request
     @Override
     public ResponseEntity<Object> getAllExperiments() {
-        return null;
+        return ResponseHandler.generateResponse("Returning all the available experiments", HttpStatus.OK, experimentRepository.findAll());
     }
 
     @Override
