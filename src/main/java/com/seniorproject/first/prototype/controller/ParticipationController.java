@@ -29,7 +29,7 @@ public class ParticipationController {
 
     //joining the experiment
     @PostMapping("/experiments-byEmail/join/{id}")
-    public Participation postJoin(@PathVariable("id") Long experimentId) throws Exception {
+    public ResponseEntity<Object> postJoin(@PathVariable("id") Long experimentId) throws Exception {
         return participationService.postJoin(experimentId);
     }
     @GetMapping("/myCreatedExperiments/pending-requests/{id}")
@@ -63,7 +63,7 @@ public class ParticipationController {
     }
 
     @GetMapping("/myRequests")
-    public List<Participation> getMyParticipationRequests(){
+    public ResponseEntity<Object> getMyParticipationRequests(){
         return participationService.getMyParticipationRequests();
     }
 

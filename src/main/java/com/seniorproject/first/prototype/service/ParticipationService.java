@@ -4,6 +4,7 @@ import com.seniorproject.first.prototype.entity.Experiment;
 import com.seniorproject.first.prototype.entity.Participation;
 import com.seniorproject.first.prototype.model.ExperimentsByEmailRequest;
 import com.seniorproject.first.prototype.model.PostParticipateRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,7 +19,7 @@ public interface ParticipationService {
     @Transactional
     public Participation postParticipate(PostParticipateRequest postParticipateRequest, Long experimentId) throws Exception;
 
-    public Participation postJoin(Long experimentId) throws Exception;
+    public ResponseEntity<Object> postJoin(Long experimentId) throws Exception;
 
     public List<Participation> getExperimentPendingRequests(Long experimentId) throws Exception;
 
@@ -30,7 +31,7 @@ public interface ParticipationService {
 
     public Participation postRejectJoinRequest(Long participationId) throws Exception;
 
-    public List<Participation> getMyParticipationRequests();
+    public ResponseEntity<Object> getMyParticipationRequests();
 
     public List<Participation> getMyTakenParticipations();
 }

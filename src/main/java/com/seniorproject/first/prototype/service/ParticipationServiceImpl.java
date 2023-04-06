@@ -9,7 +9,9 @@ import com.seniorproject.first.prototype.model.PostParticipateRequest;
 import com.seniorproject.first.prototype.repository.ExperimentRepository;
 import com.seniorproject.first.prototype.repository.ParticipationRepository;
 import com.seniorproject.first.prototype.repository.UserRepository;
+import com.seniorproject.first.prototype.util.ResponseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -105,7 +107,7 @@ public class ParticipationServiceImpl implements ParticipationService{
     }
 
     @Override
-    public Participation postJoin(Long experimentId) throws Exception {
+    public ResponseEntity<Object> postJoin(Long experimentId) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Experiment experiment = experimentRepository.findByExperimentId(experimentId);
         if(experiment.getCreator().getUserEmail().equals(authentication.getName())){
@@ -127,7 +129,7 @@ public class ParticipationServiceImpl implements ParticipationService{
         }
         participation.setParticipantResults(participantResults);
 
-        return participationRepository.save(participation);
+        return ResponseHandler.generateResponse("The join request was successfully sent", HttpStatus.OK, participationRepository.save(participation));
     }
 
     @Override
@@ -169,7 +171,7 @@ public class ParticipationServiceImpl implements ParticipationService{
     }
 
     @Override
-    public List<Participation> getMyParticipationRequests() {
+    public ResponseEntity<Object> getMyParticipationRequests() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         List<Participation> userParticipationRequests = new ArrayList<>();
@@ -181,7 +183,7 @@ public class ParticipationServiceImpl implements ParticipationService{
         userParticipationRequests.addAll(pendingRequests);
         userParticipationRequests.addAll(rejectedRequests);
 
-        return userParticipationRequests;
+        return ResponseHandler.generateResponse("Returned the participation requests that the user has sent", HttpStatus.OK, userParticipationRequests);
     }
 
     @Override
