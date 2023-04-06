@@ -206,8 +206,9 @@ public class ExperimentServiceImpl implements ExperimentService{
             if(participationRepository.findParticipationByParticipantUserEmailAndExperiment_ExperimentId(authentication.getName(), currExp.getExperimentId()) != null)
                 continue;
             // hides user info
-
-
+            else{
+                result.add(currExp);
+            }
         }
         return ResponseHandler.generateResponse("Returning all the available experiments", HttpStatus.OK, result);
     }
