@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/v2/particpation")
 public class ParticipationController {
 
     @Autowired
@@ -28,7 +29,7 @@ public class ParticipationController {
     }
 
     //joining the experiment
-    @PostMapping("/experiments-byEmail/join/{id}")
+    @PostMapping("/join/{id}")
     public ResponseEntity<Object> postJoin(@PathVariable("id") Long experimentId) throws Exception {
         return participationService.postJoin(experimentId);
     }
