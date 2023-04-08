@@ -4,7 +4,6 @@ import com.seniorproject.first.prototype.entity.Experiment;
 import com.seniorproject.first.prototype.entity.ParticipantStatus;
 import com.seniorproject.first.prototype.entity.Participation;
 import com.seniorproject.first.prototype.entity.User;
-import com.seniorproject.first.prototype.model.ExperimentsByEmailRequest;
 import com.seniorproject.first.prototype.model.PostParticipateRequest;
 import com.seniorproject.first.prototype.repository.ExperimentRepository;
 import com.seniorproject.first.prototype.repository.ParticipationRepository;
@@ -13,7 +12,6 @@ import com.seniorproject.first.prototype.util.ResponseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -134,41 +132,70 @@ public class ParticipationServiceImpl implements ParticipationService{
     }
 
     @Override
-    public List<Participation> getExperimentPendingRequests(Long experimentId) throws Exception {
+    public ResponseEntity<Object> getExperimentPendingRequests(Long experimentId) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Experiment experiment = experimentRepository.findByExperimentId(experimentId);
         if(!authentication.getName().equals(experiment.getCreator().getUserEmail())){
-            throw new Exception("Can not access someone else's experiment");
+            return ResponseHandler.generateResponse("Can not access someone else's experiment", HttpStatus.BAD_REQUEST, null);
         }
-        return participationRepository.findParticipationsByExperimentExperimentIdAndStatus(experimentId, "pending");
+        List<Participation> participations;
+
+        try{
+            participations = participationRepository.findParticipationsByExperimentExperimentIdAndStatus(experimentId, "pending");
+        }
+        catch (Exception e){
+            return ResponseHandler.generateResponse("DB exception:", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+
+        return ResponseHandler.generateResponse("returned", HttpStatus.OK, participations);
+
     }
 
     @Override
-    public Participation postAcceptJoinRequest(Long participationId) throws Exception {
+    public ResponseEntity<Object> postAcceptJoinRequest(Long participationId) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Participation participation = participationRepository.findById(participationId).get();
 
         Experiment experiment = experimentRepository.findByExperimentId(participation.getExperiment().getExperimentId());
         if(!authentication.getName().equals(experiment.getCreator().getUserEmail())){
-            throw new Exception("Can not access someone else's experiment");
-        }
+            return ResponseHandler.generateResponse("Can not access someone else's experiment", HttpStatus.BAD_REQUEST, null);
 
+        }
+        Participation participation1;
         participation.setStatus(ParticipantStatus.JOINED);
-        return participationRepository.save(participation);
+        try{
+
+            participation1 = participationRepository.save(participation);
+        }
+        catch (Exception e){
+            return ResponseHandler.generateResponse("DB exception:", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+
+        return ResponseHandler.generateResponse("returned", HttpStatus.OK, participation1);
+
     }
 
     @Override
-    public Participation postRejectJoinRequest(Long participationId) throws Exception {
+    public ResponseEntity<Object> postRejectJoinRequest(Long participationId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Participation participation = participationRepository.findById(participationId).get();
 
         Experiment experiment = experimentRepository.findByExperimentId(participation.getExperiment().getExperimentId());
         if(!authentication.getName().equals(experiment.getCreator().getUserEmail())){
-            throw new Exception("Can not access someone else's experiment");
+            return ResponseHandler.generateResponse("Can not access someone else's experiment", HttpStatus.BAD_REQUEST, null);
         }
 
+        Participation participation1;
         participation.setStatus(ParticipantStatus.REJECTED);
-        return participationRepository.save(participation);
+        try{
+
+            participation1 = participationRepository.save(participation);
+        }
+        catch (Exception e){
+            return ResponseHandler.generateResponse("DB exception:", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+
+        return ResponseHandler.generateResponse("returned", HttpStatus.OK, participation1);
     }
 
     @Override
