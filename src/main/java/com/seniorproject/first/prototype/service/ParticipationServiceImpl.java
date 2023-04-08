@@ -128,8 +128,9 @@ public class ParticipationServiceImpl implements ParticipationService{
             participantResults.add(0);
         }
         participation.setParticipantResults(participantResults);
+        participationRepository.save(participation);
 
-        return ResponseHandler.generateResponse("The join request was successfully sent", HttpStatus.OK, participationRepository.save(participation));
+        return ResponseHandler.generateResponse("The join request was successfully sent", HttpStatus.OK, participation);
     }
 
     @Override
