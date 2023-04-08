@@ -107,7 +107,7 @@ public class ParticipationServiceImpl implements ParticipationService{
     }
 
     @Override
-    public ResponseEntity<Object> postJoin(Long experimentId) throws Exception {
+    public Participation postJoin(Long experimentId) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Experiment experiment = experimentRepository.findByExperimentId(experimentId);
         if(experiment.getCreator().getUserEmail().equals(authentication.getName())){
@@ -128,9 +128,9 @@ public class ParticipationServiceImpl implements ParticipationService{
             participantResults.add(0);
         }
         participation.setParticipantResults(participantResults);
-        participationRepository.save(participation);
 
-        return ResponseHandler.generateResponse("The join request was successfully sent", HttpStatus.OK, participation);
+
+        return participationRepository.save(participation);
     }
 
     @Override
@@ -172,7 +172,7 @@ public class ParticipationServiceImpl implements ParticipationService{
     }
 
     @Override
-    public ResponseEntity<Object> getMyParticipationRequests() {
+    public List<Participation> getMyParticipationRequests() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         List<Participation> userParticipationRequests = new ArrayList<>();
@@ -184,7 +184,7 @@ public class ParticipationServiceImpl implements ParticipationService{
         userParticipationRequests.addAll(pendingRequests);
         userParticipationRequests.addAll(rejectedRequests);
 
-        return ResponseHandler.generateResponse("Returned the participation requests that the user has sent", HttpStatus.OK, userParticipationRequests);
+        return userParticipationRequests;
     }
 
     @Override

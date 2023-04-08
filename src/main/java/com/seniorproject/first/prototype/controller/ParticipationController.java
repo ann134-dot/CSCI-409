@@ -30,7 +30,7 @@ public class ParticipationController {
 
     //joining the experiment
     @PostMapping("/join/{id}")
-    public ResponseEntity<Object> postJoin(@PathVariable("id") Long experimentId) throws Exception {
+    public Participation postJoin(@PathVariable("id") Long experimentId) throws Exception {
         return participationService.postJoin(experimentId);
     }
     @GetMapping("/myCreatedExperiments/pending-requests/{id}")
@@ -64,7 +64,7 @@ public class ParticipationController {
     }
 
     @GetMapping("/myRequests")
-    public ResponseEntity<Object> getMyParticipationRequests(){
+    public List<Participation> getMyParticipationRequests(){
         return participationService.getMyParticipationRequests();
     }
 

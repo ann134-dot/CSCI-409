@@ -19,7 +19,7 @@ public interface ParticipationService {
     @Transactional
     public Participation postParticipate(PostParticipateRequest postParticipateRequest, Long experimentId) throws Exception;
 
-    public ResponseEntity<Object> postJoin(Long experimentId) throws Exception;
+    public Participation postJoin(Long experimentId) throws Exception;
 
     public List<Participation> getExperimentPendingRequests(Long experimentId) throws Exception;
 
@@ -31,7 +31,7 @@ public interface ParticipationService {
 
     public Participation postRejectJoinRequest(Long participationId) throws Exception;
 
-    public ResponseEntity<Object> getMyParticipationRequests();
+    public List<Participation> getMyParticipationRequests();
 
     public List<Participation> getMyTakenParticipations();
 }
