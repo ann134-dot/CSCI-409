@@ -22,7 +22,7 @@ public interface ParticipationService {
 
     public ResponseEntity<Object> getExperimentPendingRequests(Long experimentId) throws Exception;
 
-    public Object postAcceptJoinRequest(Long participationId) throws Exception;
+    public ResponseEntity<Object> postAcceptJoinRequest(Long participationId) throws Exception;
 
     public List<Participation> getExperimentJoinedParticipations(Long experimentId) throws Exception;
 

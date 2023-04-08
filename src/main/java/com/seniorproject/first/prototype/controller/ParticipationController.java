@@ -2,7 +2,6 @@ package com.seniorproject.first.prototype.controller;
 
 import com.seniorproject.first.prototype.entity.Experiment;
 import com.seniorproject.first.prototype.entity.Participation;
-import com.seniorproject.first.prototype.model.ExperimentsByEmailRequest;
 import com.seniorproject.first.prototype.model.PostParticipateRequest;
 import com.seniorproject.first.prototype.service.ParticipationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,15 +33,15 @@ public class ParticipationController {
         return participationService.postJoin(experimentId);
     }
     @GetMapping("/myCreatedExperiments/pending-requests/{id}")
-    public List<Participation> getExperimentPendingRequests(@PathVariable("id") Long experimentId) throws Exception {
+    public ResponseEntity<Object> getExperimentPendingRequests(@PathVariable("id") Long experimentId) throws Exception {
         return participationService.getExperimentPendingRequests(experimentId);
     }
     @PostMapping("/myCreatedExperiments/pending-requests/accept-request/{id}")
-    public Participation postAcceptJoinRequest(@PathVariable("id") Long participationId) throws Exception {
+    public ResponseEntity<Object> postAcceptJoinRequest(@PathVariable("id") Long participationId) throws Exception {
         return participationService.postAcceptJoinRequest(participationId);
     }
     @PostMapping("/myCreatedExperiments/pending-requests/reject-request/{id}")
-    public Participation postrejectJoinRequest(@PathVariable("id") Long participationId) throws Exception {
+    public ResponseEntity<Object> postrejectJoinRequest(@PathVariable("id") Long participationId) throws Exception {
         return participationService.postRejectJoinRequest(participationId);
     }
 
