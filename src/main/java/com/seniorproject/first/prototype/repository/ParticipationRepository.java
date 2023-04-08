@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface ParticipationRepository extends JpaRepository<Participation, Long> {
-    List<Participation> findParticipationsByExperimentExperimentIdAndStatus(Long experimentId, String status);
+    List<Participation> findParticipationsByExperimentExperimentIdAndStatus(Long experimentId, ParticipantStatus status);
     Participation findParticipationByParticipantUserEmailAndExperiment_ExperimentIdAndStatus(String userEmail, Long experimentId, String status);
 
     List<Participation> findParticipationByExperiment_ExperimentId(Long experimentId);

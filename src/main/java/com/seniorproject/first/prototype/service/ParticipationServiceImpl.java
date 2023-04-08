@@ -141,7 +141,7 @@ public class ParticipationServiceImpl implements ParticipationService{
         List<Participation> participations;
 
         try{
-            participations = participationRepository.findParticipationsByExperimentExperimentIdAndStatus(experimentId, "pending");
+            participations = participationRepository.findParticipationsByExperimentExperimentIdAndStatus(experimentId, ParticipantStatus.PENDING);
         }
         catch (Exception e){
             return ResponseHandler.generateResponse("DB exception:", HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
@@ -227,7 +227,7 @@ public class ParticipationServiceImpl implements ParticipationService{
         if(!authentication.getName().equals(experimentRepository.findByExperimentId(experimentId).getCreator().getUserEmail())){
             throw new Exception("Not permitted");
         } else {
-            return participationRepository.findParticipationsByExperimentExperimentIdAndStatus(experimentId, "joined");
+            return participationRepository.findParticipationsByExperimentExperimentIdAndStatus(experimentId, ParticipantStatus.JOINED);
         }
     }
 
@@ -237,7 +237,7 @@ public class ParticipationServiceImpl implements ParticipationService{
         if(!authentication.getName().equals(experimentRepository.findByExperimentId(experimentId).getCreator().getUserEmail())){
             throw new Exception("Not permitted");
         } else {
-            return participationRepository.findParticipationsByExperimentExperimentIdAndStatus(experimentId, "taken");
+            return participationRepository.findParticipationsByExperimentExperimentIdAndStatus(experimentId, ParticipantStatus.TAKEN);
         }
     }
 }
