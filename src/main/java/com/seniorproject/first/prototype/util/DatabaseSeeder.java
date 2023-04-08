@@ -41,6 +41,22 @@ public class DatabaseSeeder implements CommandLineRunner {
                     .password(passwordEncoder.encode("1234"))
                     .build();
             userRepository.save(user);
+
+            User user2 = User.builder()
+                    .userEmail("user@gmail.com")
+                    .age(22L)
+                    .gender("m")
+                    .degree("UG")
+                    .firstName("User")
+                    .lastName("Testov")
+                    .role(Role.USER)
+                    .password(passwordEncoder.encode("1234"))
+                    .build();
+            userRepository.save(user2);
+
+            experiment = Experiment.builder()
+
+                    .build();
         } catch (Exception e) {
             log.error("error in creating a user: {}", e.getMessage());
         }
