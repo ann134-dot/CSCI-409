@@ -176,9 +176,9 @@ public class ParticipationServiceImpl implements ParticipationService{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         List<Participation> userParticipationRequests = new ArrayList<>();
-        List<Participation> pendingRequests = participationRepository.findParticipationsByParticipantUserEmailAndStatus(authentication.getName(), "pending");
-        List<Participation> acceptedRequests = participationRepository.findParticipationsByParticipantUserEmailAndStatus(authentication.getName(), "joined");
-        List<Participation> rejectedRequests = participationRepository.findParticipationsByParticipantUserEmailAndStatus(authentication.getName(), "rejected");
+        List<Participation> pendingRequests = participationRepository.findParticipationsByParticipantUserEmailAndStatus(authentication.getName(), ParticipantStatus.PENDING);
+        List<Participation> acceptedRequests = participationRepository.findParticipationsByParticipantUserEmailAndStatus(authentication.getName(), ParticipantStatus.JOINED);
+        List<Participation> rejectedRequests = participationRepository.findParticipationsByParticipantUserEmailAndStatus(authentication.getName(), ParticipantStatus.REJECTED);
 
         userParticipationRequests.addAll(acceptedRequests);
         userParticipationRequests.addAll(pendingRequests);
@@ -191,7 +191,7 @@ public class ParticipationServiceImpl implements ParticipationService{
     public List<Participation> getMyTakenParticipations() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        return participationRepository.findParticipationsByParticipantUserEmailAndStatus(authentication.getName(), "taken");
+        return participationRepository.findParticipationsByParticipantUserEmailAndStatus(authentication.getName(), ParticipantStatus.TAKEN);
     }
 
     @Override

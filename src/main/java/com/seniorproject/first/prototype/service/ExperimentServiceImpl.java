@@ -1,6 +1,7 @@
 package com.seniorproject.first.prototype.service;
 
 import com.seniorproject.first.prototype.entity.Experiment;
+import com.seniorproject.first.prototype.entity.ParticipantStatus;
 import com.seniorproject.first.prototype.entity.Participation;
 import com.seniorproject.first.prototype.entity.User;
 import com.seniorproject.first.prototype.repository.ExperimentRepository;
@@ -221,7 +222,7 @@ public class ExperimentServiceImpl implements ExperimentService{
     public List<Experiment> getMyPendingJoinExperiments() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        List<Participation> participationList = participationRepository.findParticipationsByParticipantUserEmailAndStatus(authentication.getName(), "pending");
+        List<Participation> participationList = participationRepository.findParticipationsByParticipantUserEmailAndStatus(authentication.getName(), ParticipantStatus.PENDING);
 
         List<Experiment> pendingExperimentsList = new ArrayList<>();
 
@@ -235,7 +236,7 @@ public class ExperimentServiceImpl implements ExperimentService{
     @Override
     public List<Experiment> getMyJoinedExperiments() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<Participation> participationList = participationRepository.findParticipationsByParticipantUserEmailAndStatus(authentication.getName(), "joined");
+        List<Participation> participationList = participationRepository.findParticipationsByParticipantUserEmailAndStatus(authentication.getName(), ParticipantStatus.JOINED);
 
         List<Experiment> joinedExperimentsList = new ArrayList<>();
 
@@ -249,7 +250,7 @@ public class ExperimentServiceImpl implements ExperimentService{
     @Override
     public List<Experiment> getMyTakenExperiments() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<Participation> participationList = participationRepository.findParticipationsByParticipantUserEmailAndStatus(authentication.getName(), "taken");
+        List<Participation> participationList = participationRepository.findParticipationsByParticipantUserEmailAndStatus(authentication.getName(), ParticipantStatus.TAKEN);
         List<Experiment> takenExperimentsList = new ArrayList<>();
 
         for(int i = 0; i < participationList.size(); i++){
