@@ -81,6 +81,11 @@ public class ParticipationServiceImpl implements ParticipationService{
             throw new Exception("You have already taken the experiment");
         }
 
+        //removing white spaces, converting to lowercase
+        for(int i = 0; i < postParticipateRequest.getParticipantResponseList().size(); i++){
+            postParticipateRequest.getParticipantResponseList().set(i, postParticipateRequest.getParticipantResponseList().get(i).toLowerCase().replaceAll("\\s+",""));
+        }
+
         for(int i = 0; i < experiment.getWords().size(); i++){
             if(postParticipateRequest.getParticipantResponseList().contains(experiment.getWords().get(i))){
                 experiment.getOverallResults().set(i, experiment.getOverallResults().get(i) + 1);
