@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.List;
 
 @RestController
@@ -22,8 +23,8 @@ public class ParticipationController {
 //        return participationService.findExperimentsByEmail(creatorEmail);
 //    }
 
-    @GetMapping("/experiments-byEmail/participate/{id}")
-    public Experiment getParticpate(@PathVariable("id") Long experimentId) throws Exception {
+    @GetMapping("/participate/{id}")
+    public ResponseEntity<Object> getParticpate(@PathVariable("id") Long experimentId) throws Exception {
         return participationService.getParticipate(experimentId);
     }
 
@@ -47,8 +48,8 @@ public class ParticipationController {
 
     //taking the experiment
 
-    @PostMapping("/experiments-byEmail/participate/{id}")
-    public Participation postParticipate(@RequestBody PostParticipateRequest postParticipateRequest, @PathVariable("id") Long experimentId) throws Exception {
+    @PostMapping("/participate/{id}")
+    public ResponseEntity<Object> postParticipate(@RequestBody PostParticipateRequest postParticipateRequest, @PathVariable("id") Long experimentId) throws Exception {
         return participationService.postParticipate(postParticipateRequest, experimentId);
     }
 

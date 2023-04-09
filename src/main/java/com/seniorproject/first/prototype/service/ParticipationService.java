@@ -13,10 +13,10 @@ import java.util.List;
 public interface ParticipationService {
     public List<Experiment> findExperimentsByEmail(String creatorEmail);
 
-    public Experiment getParticipate(Long experimentId) throws Exception;
+    public ResponseEntity<Object> getParticipate(Long experimentId) throws Exception;
 
     @Transactional
-    public Participation postParticipate(PostParticipateRequest postParticipateRequest, Long experimentId) throws Exception;
+    public ResponseEntity<Object> postParticipate(PostParticipateRequest postParticipateRequest, Long experimentId) throws Exception;
 
     public ResponseEntity<Object> postJoin(Long experimentId) throws Exception;
 

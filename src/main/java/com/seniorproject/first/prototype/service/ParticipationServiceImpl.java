@@ -53,37 +53,31 @@ public class ParticipationServiceImpl implements ParticipationService{
     }
 
     @Override
-    public Experiment getParticipate(Long experimentId) throws Exception {
+    public ResponseEntity<Object> getParticipate(Long experimentId) throws Exception {
         Experiment experiment = experimentRepository.findByExperimentId(experimentId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(experiment.getCreator().getUserEmail().equals(authentication.getName())){
             throw new Exception("Can not participate in your own experiments");
         }
-        if(experiment.getIsJoinable() == false){
-            throw new Exception("Experiment is not joinable");
+        if(participationRepository.findParticipationByParticipantUserEmailAndExperiment_ExperimentIdAndStatus(authentication.getName(), experimentId, ParticipantStatus.JOINED) == null){
+            throw new Exception("Your join request was not sent OR was rejected OR was not approved yet");
         }
-        if(participationRepository.findParticipationByParticipantUserEmailAndExperiment_ExperimentIdAndStatus(authentication.getName(), experimentId, "taken") != null){
+        if(participationRepository.findParticipationByParticipantUserEmailAndExperiment_ExperimentIdAndStatus(authentication.getName(), experimentId, ParticipantStatus.TAKEN) != null){
             throw new Exception("You have already taken this experiment");
         }
-        if(participationRepository.findParticipationByParticipantUserEmailAndExperiment_ExperimentIdAndStatus(authentication.getName(), experimentId, "joined") != null){
-            throw new Exception("You have already joined this experiment");
-        }
-        if(participationRepository.findParticipationByParticipantUserEmailAndExperiment_ExperimentIdAndStatus(authentication.getName(), experimentId, "pending") != null){
-            throw new Exception("Your request to join was already sent");
-        }
-        return experimentRepository.findByExperimentId(experimentId);
+        return ResponseHandler.generateResponse("Returning the experiment data for participation", HttpStatus.OK, experimentRepository.findByExperimentId(experimentId));
     }
 
     @Override
     @Transactional
-    public Participation postParticipate(PostParticipateRequest postParticipateRequest, Long experimentId) throws Exception {
+    public ResponseEntity<Object> postParticipate(PostParticipateRequest postParticipateRequest, Long experimentId) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Experiment experiment = experimentRepository.findByExperimentId(experimentId);
-        Participation participation = participationRepository.findParticipationByParticipantUserEmailAndExperiment_ExperimentIdAndStatus(authentication.getName(), experimentId, "joined");
+        Participation participation = participationRepository.findParticipationByParticipantUserEmailAndExperiment_ExperimentIdAndStatus(authentication.getName(), experimentId, ParticipantStatus.JOINED);
         if(participation == null){
             throw new Exception("Users that did not join the experiment can not take it");
         }
-        if(participationRepository.findParticipationByParticipantUserEmailAndExperiment_ExperimentIdAndStatus(authentication.getName(), experimentId, "taken") != null){
+        if(participationRepository.findParticipationByParticipantUserEmailAndExperiment_ExperimentIdAndStatus(authentication.getName(), experimentId, ParticipantStatus.TAKEN) != null){
             throw new Exception("You have already taken the experiment");
         }
 
@@ -100,8 +94,8 @@ public class ParticipationServiceImpl implements ParticipationService{
 
         participation.setExperiment(experiment);
         participation.setStatus(ParticipantStatus.TAKEN);
-
-        return participationRepository.save(participation);
+        participationRepository.save(participation);
+        return ResponseHandler.generateResponse("Participation successful, returning back the results", HttpStatus.OK, participation);
     }
 
     @Override
