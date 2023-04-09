@@ -4,7 +4,8 @@ spring:
     username: ${PROD_DB_USERNAME}
     password: ${PROD_DB_PASSWORD}
     name: spring-blog
-
+  jpa:
+    defer-datasource-initialization: true
   sql:
     init:
-      mode: always # you won't do this in prod, I'm just doing this for demo purposes
+      mode: always
