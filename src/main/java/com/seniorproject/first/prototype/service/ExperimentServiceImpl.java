@@ -38,6 +38,11 @@ public class ExperimentServiceImpl implements ExperimentService{
         if(experiment.getWords() == null)
             return ResponseHandler.generateResponse("Words are not provided", HttpStatus.BAD_REQUEST, null);
 
+        //removing white spaces, converting to lowercase
+        for(int i = 0; i < experiment.getWords().size(); i++){
+            experiment.getWords().set(i, experiment.getWords().get(i).toLowerCase().replaceAll("\\s+",""));
+        }
+
         experiment.setFrequencyRange(null);
         experiment.setNumberOfWords(experiment.getWords().size());
         experiment.setLengthOfWords(null);
