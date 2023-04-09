@@ -76,6 +76,7 @@ public class Experiment {
 
     @ManyToOne(
             cascade = CascadeType.ALL
+//            cascade = CascadeType.MERGE
     )
     @JoinColumn(
             name = "creator_id",

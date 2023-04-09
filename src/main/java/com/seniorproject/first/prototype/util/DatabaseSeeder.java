@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+
 @Component
 @Slf4j
 public class DatabaseSeeder implements CommandLineRunner {
@@ -30,7 +33,7 @@ public class DatabaseSeeder implements CommandLineRunner {
     public void run(String... args) throws Exception {
         Experiment experiment;
         try {
-            User user = User.builder()
+            final User user = User.builder()
                     .userEmail("test@gmail.com")
                     .age(22L)
                     .gender("m")
@@ -42,7 +45,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                     .build();
             userRepository.save(user);
 
-            User user2 = User.builder()
+            final User user2 = User.builder()
                     .userEmail("user@gmail.com")
                     .age(22L)
                     .gender("m")
@@ -54,11 +57,31 @@ public class DatabaseSeeder implements CommandLineRunner {
                     .build();
             userRepository.save(user2);
 
+            List<String> words = experimentRepository.findRandomWords(4);
             experiment = Experiment.builder()
-
+                    .experimentName("EDXP1")
+                    .description("description of EXP3")
+                    .isJoinable(true)
+                    .wordTime(1.0)
+                    .betweenWordTime(1.5)
+                    .numberOfWords(4)
+                    .words(words)
                     .build();
+            experiment.setCreator(userRepository.findUserByUserEmail("user@gmail.com").get());
+            experimentRepository.save(experiment);
+            Experiment experiment2 = Experiment.builder()
+                    .experimentName("ED3")
+                    .description("description of EXP3")
+                    .isJoinable(true)
+                    .wordTime(1.0)
+                    .betweenWordTime(1.5)
+                    .numberOfWords(4)
+                    .words(words)
+                    .build();
+            experiment.setCreator(userRepository.findUserByUserEmail("test@gmail.com").get());
+            experimentRepository.save(experiment2);
         } catch (Exception e) {
-            log.error("error in creating a user: {}", e.getMessage());
+            log.error("error: {}", e.getMessage());
         }
 
 
