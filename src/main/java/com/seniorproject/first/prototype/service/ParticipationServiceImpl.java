@@ -214,10 +214,11 @@ public class ParticipationServiceImpl implements ParticipationService{
     }
 
     @Override
-    public List<Participation> getMyTakenParticipations() {
+    public ResponseEntity<Object> getMyTakenParticipation(Long experimentId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Participation result = participationRepository.findParticipationByParticipantUserEmailAndExperiment_ExperimentIdAndStatus(authentication.getName(), experimentId, ParticipantStatus.TAKEN);
 
-        return participationRepository.findParticipationsByParticipantUserEmailAndStatus(authentication.getName(), ParticipantStatus.TAKEN);
+        return ResponseHandler.generateResponse("Returned results for the taken experiment", HttpStatus.OK, result);
     }
 
     @Override

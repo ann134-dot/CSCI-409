@@ -32,5 +32,5 @@ public interface ParticipationService {
 
     public ResponseEntity<Object> getMyParticipationRequests();
 
-    public List<Participation> getMyTakenParticipations();
+    public ResponseEntity<Object> getMyTakenParticipation(Long experimentId);
 }

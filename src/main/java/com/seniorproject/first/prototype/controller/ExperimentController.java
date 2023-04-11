@@ -59,7 +59,7 @@ public class ExperimentController {
     }
 
     @GetMapping("/UserTakenExperiments")
-    public List<Experiment> getMyTakenExperiments(){
+    public ResponseEntity<Object> getMyTakenExperiments(){
         return experimentService.getMyTakenExperiments();
     }
 

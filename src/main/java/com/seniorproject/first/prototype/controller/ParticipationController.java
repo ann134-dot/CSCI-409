@@ -68,8 +68,8 @@ public class ParticipationController {
         return participationService.getMyParticipationRequests();
     }
 
-    @GetMapping("/myTakenParticipations")
-    public List<Participation> getMyTakenParticipations(){
-        return participationService.getMyTakenParticipations();
+    @GetMapping("/myTakenParticipation/{experimentId}")
+    public ResponseEntity<Object> getMyTakenParticipation(@PathVariable("experimentId") Long experimentId){
+        return participationService.getMyTakenParticipation(experimentId);
     }
 }
