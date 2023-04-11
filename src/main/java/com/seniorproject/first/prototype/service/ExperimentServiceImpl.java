@@ -253,7 +253,7 @@ public class ExperimentServiceImpl implements ExperimentService{
     }
 
     @Override
-    public List<Experiment> getMyTakenExperiments() {
+    public ResponseEntity<Object> getMyTakenExperiments() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         List<Participation> participationList = participationRepository.findParticipationsByParticipantUserEmailAndStatus(authentication.getName(), ParticipantStatus.TAKEN);
         List<Experiment> takenExperimentsList = new ArrayList<>();
@@ -262,7 +262,7 @@ public class ExperimentServiceImpl implements ExperimentService{
             takenExperimentsList.add(participationList.get(i).getExperiment());
         }
 
-        return takenExperimentsList;
+        return ResponseHandler.generateResponse("Returning the list of taken experiments", HttpStatus.OK, takenExperimentsList);
     }
 
     @Override

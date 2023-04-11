@@ -23,7 +23,7 @@ public interface ExperimentService {
 
     public List<Experiment> getMyJoinedExperiments();
 
-    public List<Experiment> getMyTakenExperiments();
+    public ResponseEntity<Object> getMyTakenExperiments();
 
     ResponseEntity<Object> deleteMyCreatedExperimentById(Long experimentId);
 
