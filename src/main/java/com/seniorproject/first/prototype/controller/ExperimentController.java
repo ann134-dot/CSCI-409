@@ -39,7 +39,7 @@ public class ExperimentController {
         return experimentService.getAllExperiments();
     }
 
-    @GetMapping("/myCreatedExperiments/{id}")
+    @GetMapping("/myCreatedExperiments/id/{id}")
     public ResponseEntity<Object> getMyCreatedExperimentById(@PathVariable("id") Long experimentId){
         return experimentService.getMyExperimentById(experimentId);
     }
