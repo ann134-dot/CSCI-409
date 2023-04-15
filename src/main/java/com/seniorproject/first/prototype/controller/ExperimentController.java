@@ -72,7 +72,7 @@ public class ExperimentController {
     }
 
     @PutMapping("/myCreatedExperiments/{id}")
-    public Experiment updateMyCreatedExperimentById(@PathVariable("id") Long experimentId, @RequestBody Experiment experiment) throws Exception {
+    public ResponseEntity<Object> updateMyCreatedExperimentById(@PathVariable("id") Long experimentId, @RequestBody Experiment experiment) throws Exception {
         return experimentService.updateMyCreatedExperimentById(experimentId, experiment);
     }
 

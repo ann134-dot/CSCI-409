@@ -289,10 +289,10 @@ public class ExperimentServiceImpl implements ExperimentService{
     }
 
     @Override
-    public Experiment updateMyCreatedExperimentById(Long experimentId, Experiment experiment) throws Exception {
+    public ResponseEntity<Object> updateMyCreatedExperimentById(Long experimentId, Experiment experiment) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Experiment dbExperiment = experimentRepository.findByExperimentId(experimentId);
-        if(!authentication.getName().equals(experiment.getCreator().getUserEmail())){
+        if(!authentication.getName().equals(dbExperiment.getCreator().getUserEmail())){
             throw new Exception("Experiment was created by a different user");
         }
         else {
@@ -309,7 +309,8 @@ public class ExperimentServiceImpl implements ExperimentService{
                 dbExperiment.setIsJoinable(!dbExperiment.getIsJoinable());
             }
         }
-        return experimentRepository.save(dbExperiment);
+        experimentRepository.save(dbExperiment);
+        return ResponseHandler.generateResponse("ExperimentInfo was updated successfully", HttpStatus.OK, dbExperiment);
     }
 
     //to be implemented

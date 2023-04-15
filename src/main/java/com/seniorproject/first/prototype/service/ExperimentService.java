@@ -27,7 +27,7 @@ public interface ExperimentService {
 
     ResponseEntity<Object> deleteMyCreatedExperimentById(Long experimentId);
 
-    public Experiment updateMyCreatedExperimentById(Long experimentId, Experiment experiment) throws Exception;
+    public ResponseEntity<Object> updateMyCreatedExperimentById(Long experimentId, Experiment experiment) throws Exception;
 
 
 
