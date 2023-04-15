@@ -274,16 +274,35 @@ public class ExperimentServiceImpl implements ExperimentService{
         if(!authentication.getName().equals(experiment.getCreator().getUserEmail()))
             return ResponseHandler.generateResponse("Experiment was created by a different user", HttpStatus.FORBIDDEN, experimentId);
 
-       try{
-           User user = userRepository.findUserByUserEmail(experiment.getCreator().getUserEmail()).get();
-           user.getCreatedExperiments().remove(experiment);
-           userRepository.save(user);
-           experimentRepository.deleteById(experimentId);
-       }
-       catch (Exception e){
-           return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, null);
+        try{
+            // find users who participated or requested the experiment and delete the entry
+            List<Participation> participations = participationRepository.findParticipationByExperiment_ExperimentId(experimentId);
+            User userCreator = userRepository.findUserByUserEmail(experiment.getCreator().getUserEmail()).get();
 
-       }
+            for(Participation participation: participations){
+                User user = participation.getParticipant();
+                log.info("got user ");
+                user.getParticipatedExperiments().remove(experiment);
+                userRepository.save(user);
+                log.info("saved the user");
+
+                //remove user from participation table before deleting the participation entry
+                participation.setParticipant(null);
+                participation.setExperiment(null);
+                participationRepository.save(participation);
+                participationRepository.deleteById(participation.getParticipationId());
+                //log.info("deleted participation {}", participation);
+            }
+
+            //delete entry from creator user
+            userCreator.getCreatedExperiments().remove(experiment);
+            userRepository.save(userCreator);
+            experimentRepository.deleteById(experimentId);
+        }
+        catch (Exception e){
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, null);
+
+        }
         return ResponseHandler.generateResponse("Experiment " + experimentId +" is deleted", HttpStatus.OK, experimentId);
 
     }
