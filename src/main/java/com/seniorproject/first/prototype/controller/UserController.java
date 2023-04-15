@@ -2,6 +2,7 @@ package com.seniorproject.first.prototype.controller;
 
 import com.seniorproject.first.prototype.entity.Experiment;
 import com.seniorproject.first.prototype.entity.User;
+import com.seniorproject.first.prototype.model.UserInfo;
 import com.seniorproject.first.prototype.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,11 @@ public class UserController {
     @GetMapping("/myUserInfo")
     public ResponseEntity<Object> getMyUserInfo(){
         return userService.getMyUserInfo();
+    }
+
+    @PutMapping("/myUserInfo")
+    public ResponseEntity<Object> updateMyUserInfo(@RequestBody UserInfo userInfo){
+        return userService.updateMyUserInfo(userInfo);
     }
 
 }
