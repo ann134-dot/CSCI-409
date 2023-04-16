@@ -34,6 +34,8 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .age(request.getAge())
+                .degree(request.getDegree())
+                .gender(request.getGender())
                 .build();
         var savedUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);

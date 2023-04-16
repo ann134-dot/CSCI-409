@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/SPdemo
     username: postgres
-    password: postgress
+    password: 25062001Zh
     driver-class-name: org.postgresql.Driver
   jpa:
     defer-datasource-initialization: true
