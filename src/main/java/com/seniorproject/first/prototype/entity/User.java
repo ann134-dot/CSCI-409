@@ -54,8 +54,10 @@ public class User implements UserDetails {
     private String password;
     @Positive
     private Long age;
-    private String gender;
-    private String degree;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+    @Enumerated(EnumType.STRING)
+    private Degree degree;
 
 //    @Getter(AccessLevel.NONE)
 //    @Setter(AccessLevel.NONE)

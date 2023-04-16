@@ -1,5 +1,7 @@
 package com.seniorproject.first.prototype.model;
 
+import com.seniorproject.first.prototype.entity.Degree;
+import com.seniorproject.first.prototype.entity.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +16,7 @@ public class UserInfo {
     private String firstName;
     private String lastName;
     private Long age;
-    private String gender;
-    private String degree;
+
+    private Gender gender;
+    private Degree degree;
 }

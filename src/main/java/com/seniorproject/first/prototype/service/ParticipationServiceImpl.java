@@ -1,11 +1,9 @@
 package com.seniorproject.first.prototype.service;
 
-import com.seniorproject.first.prototype.entity.Experiment;
-import com.seniorproject.first.prototype.entity.ParticipantStatus;
-import com.seniorproject.first.prototype.entity.Participation;
-import com.seniorproject.first.prototype.entity.User;
+import com.seniorproject.first.prototype.entity.*;
 import com.seniorproject.first.prototype.model.PostParticipateRequest;
 import com.seniorproject.first.prototype.repository.ExperimentRepository;
+import com.seniorproject.first.prototype.repository.ExperimentStatisticsRepository;
 import com.seniorproject.first.prototype.repository.ParticipationRepository;
 import com.seniorproject.first.prototype.repository.UserRepository;
 import com.seniorproject.first.prototype.util.ResponseHandler;
@@ -28,6 +26,9 @@ public class ParticipationServiceImpl implements ParticipationService{
     private ExperimentRepository experimentRepository;
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ExperimentStatisticsRepository experimentStatisticsRepository;
 
     @Override
     public List<Experiment> findExperimentsByEmail(String creatorEmail) {
@@ -93,8 +94,34 @@ public class ParticipationServiceImpl implements ParticipationService{
             }
         }
 
+        ExperimentStatistics experimentStatistics = experiment.getExperimentStatistics();
+        experimentStatistics.setAverageAge(
+                (experimentStatistics.getAverageAge()*experiment.getParticipantCount() + participation.getParticipant().getAge())
+                /(experiment.getParticipantCount()+1)
+        );
         experiment.setParticipantCount(experiment.getParticipantCount() + 1);
-        //experiment.getParticipations().add(participation);
+
+//        if(participation.getParticipant().getGender().equals(Gender.MALE))
+//            experimentStatistics.setNumberOfMaleParticipants(experimentStatistics.getNumberOfMaleParticipants()+1);
+//        else if (participation.getParticipant().getGender().equals(Gender.FEMALE))
+//            experimentStatistics.setNumberOfFemaleParticipants(experimentStatistics.getNumberOfFemaleParticipants()+1);
+//        else
+//            experimentStatistics.setNumberOfOtherParticipants(experimentStatistics.getNumberOfOtherParticipants()+1);
+
+        experimentStatistics.getNumberOfGenderParticipants().set(
+                participation.getParticipant().getGender().ordinal(),
+                experimentStatistics.getNumberOfGenderParticipants().get(participation.getParticipant().getGender().ordinal())+1
+        );
+
+        experimentStatistics.getNumberOfDegreeParticipants().set(
+                participation.getParticipant().getDegree().ordinal(),
+                experimentStatistics.getNumberOfDegreeParticipants().get(participation.getParticipant().getDegree().ordinal())+1
+                ) ;
+
+
+        experimentStatisticsRepository.save(experimentStatistics);
+        experiment.setExperimentStatistics(experimentStatistics);
+
         experimentRepository.save(experiment);
 
         participation.setExperiment(experiment);

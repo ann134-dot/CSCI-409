@@ -1,10 +1,8 @@
 package com.seniorproject.first.prototype.service;
 
-import com.seniorproject.first.prototype.entity.Experiment;
-import com.seniorproject.first.prototype.entity.ParticipantStatus;
-import com.seniorproject.first.prototype.entity.Participation;
-import com.seniorproject.first.prototype.entity.User;
+import com.seniorproject.first.prototype.entity.*;
 import com.seniorproject.first.prototype.repository.ExperimentRepository;
+import com.seniorproject.first.prototype.repository.ExperimentStatisticsRepository;
 import com.seniorproject.first.prototype.repository.ParticipationRepository;
 import com.seniorproject.first.prototype.repository.UserRepository;
 import com.seniorproject.first.prototype.util.ResponseHandler;
@@ -25,12 +23,14 @@ public class ExperimentServiceImpl implements ExperimentService{
     private final ExperimentRepository experimentRepository;
     private final UserRepository userRepository;
     private final ParticipationRepository participationRepository;
+    private final ExperimentStatisticsRepository experimentStatisticsRepository;
 
     @Autowired
-    public ExperimentServiceImpl(ExperimentRepository experimentRepository, UserRepository userRepository, ParticipationRepository participationRepository) {
+    public ExperimentServiceImpl(ExperimentRepository experimentRepository, UserRepository userRepository, ParticipationRepository participationRepository, ExperimentStatisticsRepository experimentStatisticsRepository) {
         this.experimentRepository = experimentRepository;
         this.userRepository = userRepository;
         this.participationRepository = participationRepository;
+        this.experimentStatisticsRepository = experimentStatisticsRepository;
     }
 
     @Override
@@ -46,12 +46,18 @@ public class ExperimentServiceImpl implements ExperimentService{
         experiment.setFrequencyRange(null);
         experiment.setNumberOfWords(experiment.getWords().size());
         experiment.setLengthOfWords(null);
+        experiment.setParticipantCount(0L);
+
         setOverallResults(experiment);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserName = authentication.getName();
         User user = userRepository.findUserByUserEmail(currentUserName).get();
         experiment.setCreator(user);
+
+        ExperimentStatistics experimentStatistics = new ExperimentStatistics();
+        experimentStatisticsRepository.save(experimentStatistics);
+        experiment.setExperimentStatistics(experimentStatistics);
 
         experimentRepository.save(experiment);
 
@@ -69,13 +75,17 @@ public class ExperimentServiceImpl implements ExperimentService{
             experiment.setWords(experimentRepository.findRandomWords(experiment.getNumberOfWords()));
             experiment.setFrequencyRange(null);
             experiment.setLengthOfWords(null);
-
+            experiment.setParticipantCount(0L);
             setOverallResults(experiment);
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String currentUserName = authentication.getName();
             User user = userRepository.findUserByUserEmail(currentUserName).get();
             experiment.setCreator(user);
+
+            ExperimentStatistics experimentStatistics = new ExperimentStatistics();
+            experimentStatisticsRepository.save(experimentStatistics);
+            experiment.setExperimentStatistics(experimentStatistics);
 
             experimentRepository.save(experiment);
         } catch (Exception e) {
@@ -120,12 +130,17 @@ public class ExperimentServiceImpl implements ExperimentService{
         }
 
         experiment.setWords(words);
+        experiment.setParticipantCount(0L);
         setOverallResults(experiment);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserName = authentication.getName();
         User user = userRepository.findUserByUserEmail(currentUserName).get();
         experiment.setCreator(user);
+
+        ExperimentStatistics experimentStatistics = new ExperimentStatistics();
+        experimentStatisticsRepository.save(experimentStatistics);
+        experiment.setExperimentStatistics(experimentStatistics);
 
         experimentRepository.save(experiment);
         return ResponseHandler.generateResponse("Experiment " + experiment.getExperimentId() +" is created", HttpStatus.OK, experiment);
@@ -297,6 +312,12 @@ public class ExperimentServiceImpl implements ExperimentService{
             //delete entry from creator user
             userCreator.getCreatedExperiments().remove(experiment);
             userRepository.save(userCreator);
+
+            for(Experiment experiment1 : userCreator.getCreatedExperiments()){
+                if (experiment1.equals(experiment))
+                    throw new RuntimeException("Experiment is not deleted");
+            }
+
             experimentRepository.deleteById(experimentId);
         }
         catch (Exception e){

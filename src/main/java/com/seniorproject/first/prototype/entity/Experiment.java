@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Data
@@ -92,10 +93,8 @@ public class Experiment {
     )
     private List<Participation> participations;
 
-    // Data for statistics
-    Double averageAge;
-    Integer numberOfMaleParticipants;
-    Integer numberOfFemaleParticipants;
-    Integer numberOfOtherParticipants;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "experiment_statistics_id")
+    private ExperimentStatistics experimentStatistics;
 
 }

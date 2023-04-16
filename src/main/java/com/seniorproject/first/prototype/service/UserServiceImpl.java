@@ -80,11 +80,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             dbUser.setAge(userInfo.getAge());
         }
         //Update gender
-        if(Objects.nonNull(userInfo.getGender()) && !"".equalsIgnoreCase(userInfo.getGender())){
+        if(Objects.nonNull(userInfo.getGender())
+                //&& !"".equalsIgnoreCase(userInfo.getGender())
+        ){
             dbUser.setGender(userInfo.getGender());
         }
         //Update Degree
-        if(Objects.nonNull(userInfo.getDegree()) && !"".equalsIgnoreCase(userInfo.getDegree())){
+        if(Objects.nonNull(userInfo.getDegree())
+        //        && !"".equalsIgnoreCase(userInfo.getDegree()
+        ){
             dbUser.setDegree(userInfo.getDegree());
         }
         userRepository.save(dbUser);
