@@ -93,7 +93,7 @@ public class Experiment {
     )
     private List<Participation> participations;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "experiment_statistics_id")
     private ExperimentStatistics experimentStatistics;
 

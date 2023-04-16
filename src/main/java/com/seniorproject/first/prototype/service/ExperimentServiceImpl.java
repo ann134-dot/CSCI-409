@@ -313,11 +313,8 @@ public class ExperimentServiceImpl implements ExperimentService{
             userCreator.getCreatedExperiments().remove(experiment);
             userRepository.save(userCreator);
 
-            for(Experiment experiment1 : userCreator.getCreatedExperiments()){
-                if (experiment1.equals(experiment))
-                    throw new RuntimeException("Experiment is not deleted");
-            }
-
+            experiment.setCreator(null);
+            experimentRepository.save(experiment);
             experimentRepository.deleteById(experimentId);
         }
         catch (Exception e){

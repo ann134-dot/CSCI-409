@@ -35,7 +35,7 @@ public class ExperimentStatistics {
     )
     private Long experimentStatisticsId;
     @OneToOne(mappedBy = "experimentStatistics", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, optional = false)
+            fetch = FetchType.LAZY)
     private Experiment experiment;
 
     Double averageAge;
