@@ -297,6 +297,10 @@ public class ExperimentServiceImpl implements ExperimentService{
             //delete entry from creator user
             userCreator.getCreatedExperiments().remove(experiment);
             userRepository.save(userCreator);
+            log.info("{}", userCreator.getCreatedExperiments().size());
+
+            experiment.setCreator(null);
+            experimentRepository.save(experiment);
             experimentRepository.deleteById(experimentId);
         }
         catch (Exception e){
