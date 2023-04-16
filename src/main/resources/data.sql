@@ -10,6 +10,9 @@ ON conflict do NOTHING ;
 INSERT INTO user_table (user_id, age, degree, first_name, gender, last_name, password, role, user_email)
 VALUES (101, 22, 'UG', 'User', 'm', 'Testov', '$2a$10$EFWS/QOUi6yaq5r1vzbMcuisTbstOb07yvfDlZz1QjLDU/1h2iYhu', 'USER', 'user@gmail.com')
 on conflict do NOTHING ;
+INSERT INTO user_table (user_id, age, degree, first_name, gender, last_name, password, role, user_email)
+VALUES (103, 21, 'UG', 'Aiganym', 'f', 'Testov', '$2a$10$EFWS/QOUi6yaq5r1vzbMcuisTbstOb07yvfDlZz1QjLDU/1h2iYhu', 'USER', 'aiganym@gmail.com')
+on conflict do NOTHING ;
 
 --
 --

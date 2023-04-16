@@ -92,4 +92,10 @@ public class Experiment {
     )
     private List<Participation> participations;
 
+    // Data for statistics
+    Double averageAge;
+    Integer numberOfMaleParticipants;
+    Integer numberOfFemaleParticipants;
+    Integer numberOfOtherParticipants;
+
 }
