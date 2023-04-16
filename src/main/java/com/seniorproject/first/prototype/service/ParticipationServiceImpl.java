@@ -232,12 +232,13 @@ public class ParticipationServiceImpl implements ParticipationService{
     }
 
     @Override
-    public List<Participation> getExperimentTakenParticipations(Long experimentId) throws Exception {
+    public ResponseEntity<Object> getExperimentTakenParticipations(Long experimentId) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(!authentication.getName().equals(experimentRepository.findByExperimentId(experimentId).getCreator().getUserEmail())){
             throw new Exception("Not permitted");
         } else {
-            return participationRepository.findParticipationsByExperimentExperimentIdAndStatus(experimentId, ParticipantStatus.TAKEN);
+            List<Participation> result = participationRepository.findParticipationsByExperimentExperimentIdAndStatus(experimentId, ParticipantStatus.TAKEN);
+            return ResponseHandler.generateResponse("Returned taken participations for your experiment", HttpStatus.OK, result);
         }
     }
 }

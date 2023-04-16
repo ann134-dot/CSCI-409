@@ -59,7 +59,7 @@ public class ParticipationController {
     }
 
     @GetMapping("/myCreatedExperiments/taken/{id}")
-    public List<Participation> getExperimentTakenParticipations(@PathVariable("id") Long experimentId) throws Exception {
+    public ResponseEntity<Object> getExperimentTakenParticipations(@PathVariable("id") Long experimentId) throws Exception {
         return participationService.getExperimentTakenParticipations(experimentId);
     }
 
