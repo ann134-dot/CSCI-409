@@ -33,6 +33,7 @@ public class ExperimentServiceImpl implements ExperimentService{
         this.participationRepository = participationRepository;
     }
 
+
     @Override
     public ResponseEntity<Object> createExperiment(Experiment experiment) {
         if(experiment.getWords() == null)
@@ -46,12 +47,14 @@ public class ExperimentServiceImpl implements ExperimentService{
         experiment.setFrequencyRange(null);
         experiment.setNumberOfWords(experiment.getWords().size());
         experiment.setLengthOfWords(null);
-        setOverallResults(experiment);
+        setOverallResultsAndStatistics(experiment);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserName = authentication.getName();
         User user = userRepository.findUserByUserEmail(currentUserName).get();
         experiment.setCreator(user);
+
+
 
         experimentRepository.save(experiment);
 
@@ -70,7 +73,7 @@ public class ExperimentServiceImpl implements ExperimentService{
             experiment.setFrequencyRange(null);
             experiment.setLengthOfWords(null);
 
-            setOverallResults(experiment);
+            setOverallResultsAndStatistics(experiment);
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String currentUserName = authentication.getName();
@@ -120,7 +123,7 @@ public class ExperimentServiceImpl implements ExperimentService{
         }
 
         experiment.setWords(words);
-        setOverallResults(experiment);
+        setOverallResultsAndStatistics(experiment);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserName = authentication.getName();
@@ -336,7 +339,27 @@ public class ExperimentServiceImpl implements ExperimentService{
         return ResponseHandler.generateResponse("ExperimentInfo was updated successfully", HttpStatus.OK, dbExperiment);
     }
 
-    //to be implemented
+    @Override
+    public ResponseEntity<Object> getExperimentStatistics(Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserName = authentication.getName();
+        User user = userRepository.findUserByUserEmail(currentUserName).get();
+        Experiment experiment = experimentRepository.findByExperimentId(id);
+
+        //TODO who can see statistics?
+
+        Map<String, Object> stat = new HashMap<>();
+        stat.put("id", experiment.getExperimentId());
+        stat.put("name", experiment.getExperimentName());
+        stat.put("averageAge", experiment.getAverageAge());
+        stat.put("ParticipantCount", experiment.getParticipantCount());
+        stat.put("NumberOfGenderParticipants", experiment.getNumberOfGenderParticipants());
+        stat.put("NumberOfDegreeParticipants", experiment.getNumberOfDegreeParticipants());
+
+        return ResponseHandler.generateResponse("Experiment's statistics returned", HttpStatus.OK, stat);
+
+    }
+
     @Override
     public ResponseEntity<Object> getMyCreatedExperimentByExperimentName(String experimentName) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -354,13 +377,21 @@ public class ExperimentServiceImpl implements ExperimentService{
 
 
 
-    private void setOverallResults(Experiment experiment){
+    private void setOverallResultsAndStatistics(Experiment experiment){
         List<Integer> overallResults = new ArrayList<>();
         for(int i = 0; i < experiment.getWords().size(); i++){
             overallResults.add(0);
         }
         experiment.setOverallResults(overallResults);
         experiment.setParticipantCount((long)0);
+
+        List<Integer> temp = new ArrayList<>();
+        experiment.setAverageAge((double) 0);
+        for(int i=0; i<3; i++){
+            temp.add(0);
+        }
+        experiment.setNumberOfDegreeParticipants(temp);
+        experiment.setNumberOfGenderParticipants(temp);
     }
 
 }

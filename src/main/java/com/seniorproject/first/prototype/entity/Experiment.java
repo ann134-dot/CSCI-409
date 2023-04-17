@@ -93,9 +93,22 @@ public class Experiment {
     private List<Participation> participations;
 
     // Data for statistics
+    //@Column(name = "avg_age")
     Double averageAge;
-    Integer numberOfMaleParticipants;
-    Integer numberOfFemaleParticipants;
-    Integer numberOfOtherParticipants;
+
+    // MALE - 0, FEMALE - 1, OTHER - 2
+    @Type(type = "list-array")
+    @Column(
+            columnDefinition = "integer[]"
+    )
+    List<Integer> numberOfGenderParticipants;
+
+    // Associate - 0, Bachelor - 1, master's - 2, doctoral - 3
+    @Type(type = "list-array")
+    @Column(
+            columnDefinition = "integer[]"
+    )
+    List<Integer> numberOfDegreeParticipants;
+
 
 }
