@@ -93,8 +93,44 @@ public class ParticipationServiceImpl implements ParticipationService{
             }
         }
 
-        experiment.setParticipantCount(experiment.getParticipantCount() + 1);
+
         //experiment.getParticipations().add(participation);
+
+        experiment.setAverageAge(
+                (experiment.getAverageAge()*experiment.getParticipantCount() + participation.getParticipant().getAge()) /
+                        (experiment.getParticipantCount() + 1)
+        );
+        experiment.setParticipantCount(experiment.getParticipantCount() + 1);
+
+        // TODO change to enum
+        switch (participation.getParticipant().getGender().toLowerCase()){
+            case "male":
+                experiment.getNumberOfGenderParticipants().set(0,
+                        experiment.getNumberOfGenderParticipants().get(0)+1
+                );
+            case "female":
+                experiment.getNumberOfGenderParticipants().set(1,
+                        experiment.getNumberOfGenderParticipants().get(1)+1);
+            default:
+                experiment.getNumberOfGenderParticipants().set(2,
+                        experiment.getNumberOfGenderParticipants().get(2)+1);
+        }
+
+        //TODO change to enum and add other options
+        switch (participation.getParticipant().getDegree().toLowerCase()){
+            case "bachelor":
+                experiment.getNumberOfDegreeParticipants().set(0,
+                        experiment.getNumberOfDegreeParticipants().get(0)+1
+                );
+            case "master":
+                experiment.getNumberOfDegreeParticipants().set(1,
+                        experiment.getNumberOfDegreeParticipants().get(1)+1);
+            default:
+                experiment.getNumberOfDegreeParticipants().set(2,
+                        experiment.getNumberOfDegreeParticipants().get(2)+1);
+        }
+
+
         experimentRepository.save(experiment);
 
         participation.setExperiment(experiment);

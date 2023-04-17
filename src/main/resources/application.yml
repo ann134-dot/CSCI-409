@@ -2,12 +2,12 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/SPdemo
     username: postgres
-    password: 25062001Zh
+    password: postgress
     driver-class-name: org.postgresql.Driver
   jpa:
     defer-datasource-initialization: true
     hibernate:
-      ddl-auto:  create-drop
+      ddl-auto:  update
     show-sql: true
     properties:
       hibernate:

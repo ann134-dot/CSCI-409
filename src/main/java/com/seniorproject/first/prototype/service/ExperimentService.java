@@ -30,6 +30,5 @@ public interface ExperimentService {
     public ResponseEntity<Object> updateMyCreatedExperimentById(Long experimentId, Experiment experiment) throws Exception;
 
 
-
-
+    ResponseEntity<Object> getExperimentStatistics(Long id);
 }

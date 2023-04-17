@@ -63,9 +63,6 @@ public class ExperimentController {
         return experimentService.getMyTakenExperiments();
     }
 
-
-
-    //TODO check the cascading options
     @DeleteMapping("/myCreatedExperiments/{id}")
     public ResponseEntity<Object>  deleteMyCreatedExperimentById(@PathVariable("id") Long experimentId) throws Exception {
         return experimentService.deleteMyCreatedExperimentById(experimentId);
@@ -84,5 +81,10 @@ public class ExperimentController {
     @GetMapping("/experiments/{email}")
     public ResponseEntity<Object> findExperimentsByEmail(@PathVariable("email") String creatorEmail){
         return experimentService.getExperimentsByEmail(creatorEmail);
+    }
+
+    @GetMapping("/experimentStatistics/{id}")
+    public ResponseEntity<Object> getExperimentStatistics(@PathVariable("id") Long id){
+        return experimentService.getExperimentStatistics(id);
     }
 }
